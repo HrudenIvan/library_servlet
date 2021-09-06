@@ -1,0 +1,13 @@
+<Context>
+
+	<Resource name="jdbc/LibraryDB" auth="Container"
+		type="javax.sql.DataSource" maxTotal="100" maxIdle="30"
+		maxWaitMillis="10000" defaultTransactionIsolation="READ_COMMITTED"
+
+		driverClassName="com.mysql.cj.jdbc.Driver" username="root"
+		password="root" url="jdbc:mysql://localhost:3306/library" />
+
+	<ResourceLink name="jdbc/LibraryDB"
+		global="jdbc/LibraryDB" type="javax.sql.DataSource" />
+
+</Context>
