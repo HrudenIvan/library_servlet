@@ -11,7 +11,8 @@
 	<hr>
 	<h1>Add publisher</h1>
 	<form action="main?action=addPublisher" method="post">
-		Name: <input type="text" name="name"><br><br>
+		Name: <input type="text" name="name" value="${publisher.name}">
+		<label style="color:red">${errors.name}</label><br><br>
 		<input type="submit" value="Submit">
 	</form>
 </body>

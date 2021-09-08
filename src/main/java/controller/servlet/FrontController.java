@@ -22,22 +22,26 @@ public class FrontController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String page = getPage(request);
-		request.getRequestDispatcher(page).forward(request, response);
+		processRequest(request,response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String page = getPage(request);
-		response.sendRedirect(page);
+		processRequest(request, response);
 	}
 
-	private String getPage(HttpServletRequest request) {
-		String action = request.getParameter("action");
-		Command command = CommandFactory.getCommand(action);
-		String page;
-		page = command.execute(request);
-		return page;
+	private void processRequest(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			String action = request.getParameter("action");
+			Command command = CommandFactory.getCommand(action);
+			command.execute(request, response);
+		} catch (ServletException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

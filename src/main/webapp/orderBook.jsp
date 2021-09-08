@@ -11,7 +11,7 @@
 	${navigation}
 	<hr>
 	<h1>Book order</h1>
-	<form action="main?action=bookOrder" method="post">
+	<form action="main?action=addBookOrder" method="post">
 		<input type="hidden" name="bId" value="${book.id}">
 		<input type="hidden" name="uId" value="${currentUserId}">
 		Book: <input type="text" value="${book.title}" readonly><br>

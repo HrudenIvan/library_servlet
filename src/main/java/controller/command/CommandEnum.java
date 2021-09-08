@@ -121,9 +121,9 @@ public enum CommandEnum {
 			command = new PrepareBookOrderCommand();
 		}
 	},
-	BOOKORDER {
+	ADDBOOKORDER {
 		{
-			command = new BookOrderCommand();
+			command = new AddBookOrderCommand();
 		}
 	},
 	PREPARECABINET {

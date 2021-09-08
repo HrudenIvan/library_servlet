@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import controller.command.CommandEnum;
+
 import static controller.command.CommandEnum.*;
 
 @WebFilter("/*")
@@ -23,7 +24,7 @@ public class AuthenticationFilter implements Filter {
 	public AuthenticationFilter() {
 		guestCommands = EnumSet.of(LOGIN, GETALLBOOKS, ADDUSER, REGISTER, DEFAULT, FINDBOOKSBYTITLE);
 		userCommands = EnumSet.of(LOGOUT, GETALLBOOKS, DEFAULT, PREPAREBOOKORDER,
-				BOOKORDER, PREPARECABINET, FINDBOOKSBYTITLE);
+				ADDBOOKORDER, PREPARECABINET, FINDBOOKSBYTITLE);
 		librarianCommands = EnumSet.of(LOGOUT, DEFAULT, PREPARELIBRARIAN, PREPAREBOOKORDERUPDATE,
 				UPDATEBOOKORDER, SUBSCRIPTION);
 		adminCommands = EnumSet.of(LOGOUT, GETALLBOOKS, GETALLUSERS, UPDATEUSER, PREPAREUSER,
@@ -42,7 +43,6 @@ public class AuthenticationFilter implements Filter {
 				req.getRequestDispatcher(path).forward(request, response);
 				return;
 			}
-			System.out.println("null redirect");
 			req.getRequestDispatcher("main?action=default").forward(request, response);
 			return;
 		}
@@ -52,25 +52,21 @@ public class AuthenticationFilter implements Filter {
 		CommandEnum command = CommandEnum.valueOf(action.toUpperCase());
 		
 		if ("guest".equals(userType) && !guestCommands.contains(command)) {
-			System.out.println("guest redirect");
 			req.getRequestDispatcher("main?action=default").forward(request, response);
 			return;
 		}
 		
 		if ("user".equals(userType) && !userCommands.contains(command)) {
-			System.out.println("user redirect");
 			req.getRequestDispatcher("main?action=default").forward(request, response);
 			return;
 		}
 		
 		if ("librarian".equals(userType) && !librarianCommands.contains(command)) {
-			System.out.println("librarian redirect");
 			req.getRequestDispatcher("main?action=default").forward(request, response);
 			return;
 		}
 		
 		if ("admin".equals(userType) && !adminCommands.contains(command)) {
-			System.out.println("admin redirect");
 			req.getRequestDispatcher("main?action=default").forward(request, response);
 			return;
 		}

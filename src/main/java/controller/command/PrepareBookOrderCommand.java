@@ -1,8 +1,12 @@
 package controller.command;
 
+import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import model.DAO.BookDAO;
 import model.DAO.BookDAOImpl;
 import model.DAO.OrderDAO;
@@ -13,17 +17,18 @@ import model.entity.OrderType;
 public class PrepareBookOrderCommand implements Command {
 
 	@Override
-	public String execute(HttpServletRequest request) {
+	public void execute(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		BookDAO bookDAO = BookDAOImpl.getInstance();
 		Long bookId = Long.valueOf(request.getParameter("bId"));
 		Book book = bookDAO.getBook(bookId);
 		request.setAttribute("book", book);
-		
+
 		OrderDAO orderDAO = OrderDAOImpl.getInstance();
 		List<OrderType> orderTypes = orderDAO.getAllOrderTypes();
 		request.setAttribute("orderTypes", orderTypes);
-		
-		return "orderBook.jsp";
+
+		request.getRequestDispatcher("orderBook.jsp").forward(request, response);
 	}
 
 }

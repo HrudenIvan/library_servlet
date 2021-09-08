@@ -12,8 +12,10 @@
 	<h1>Update Author</h1>
 	<form action="main?action=updateAuthor" method="post">
 		<input type="hidden" name="aId" value="${author.id}">
-		First name: <input type="text" name="firstName" value="${author.firstName}"><br>
-		Last name: <input type="text" name="lastName" value="${author.lastName}"><br><br>
+		First name: <input type="text" name="firstName" value="${author.firstName}">
+		<label style="color:red">${errors.firstname}</label><br>
+		Last name: <input type="text" name="lastName" value="${author.lastName}">
+		<label style="color:red">${errors.lastname}</label><br><br>
 		<input type="submit" value="Update">
 	</form>
 </body>

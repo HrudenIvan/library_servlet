@@ -15,19 +15,29 @@
 	<h1>Update user</h1>
 	<form action="main?action=updateUser" method="post">
 		<input type="hidden" name="uId" value="${user.id}">
-		Login: <input type="text" name="login" value="${user.login}"><br>
-		Password: <input type="text" name="password"><br>
-		Password: <input type="text" name="password1"><br>
-		First name: <input type="text" name="firstName"	value="${user.firstName}"><br>
-		Last name: <input type="text" name="lastName" value="${user.lastName}"><br>
+		Login: <input type="text" name="login" value="${user.login}">
+		<label style="color:red">${errors.login}</label><br>
+		Password: <input type="password" name="password">
+		<label style="color:red">${errors.password}</label><br>
+		Password: <input type="password" name="password1"><br>
+		First name: <input type="text" name="firstName"	value="${user.firstName}">
+		<label style="color:red">${errors.firstname}</label><br>
+		Last name: <input type="text" name="lastName" value="${user.lastName}">
+		<label style="color:red">${errors.lastname}</label><br>
 		User type:
 		<select name="tId">
-			<option value="${user.userType.id}" selected>${user.userType.type}</option>
+			<c:set var="curUtId" value="${user.userType.id}"/>
 			<c:forEach var="ut" items="${userTypes}">
-				<option value="${ut.id}">${ut.type}</option>
+				<option value="${ut.id}"
+					<c:set var="utId" value="${ut.id}"/>
+					<c:if test="${curUtId eq utId}">
+						selected
+					</c:if>
+				>${ut.type}</option>
 			</c:forEach>
 		</select><br>
-		Penalty:<input type="text" name="penalty" value="${user.penalty}"><br>
+		Penalty:<input type="text" name="penalty" value="${user.penalty}">
+		<label style="color:red">${errors.penalty}</label><br>
 		Blocked: <select name="isBlocked">
 			<option value="${user.isBlocked}" selected>${user.isBlocked}</option>
 			<option value="false">false</option>

@@ -1,9 +1,10 @@
 package controller.command;
 
+import java.io.IOException;
 import java.util.List;
-
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.HttpServletResponse;
 import model.DAO.AuthorDAO;
 import model.DAO.AuthorDAOImpl;
 import model.DAO.PublisherDAO;
@@ -14,7 +15,7 @@ import model.entity.Publisher;
 public class AddBookLinkCommand implements Command {
 
 	@Override
-	public String execute(HttpServletRequest request) {
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PublisherDAO pubDAO = PublisherDAOImpl.getInstance();
 		List<Publisher> publishers = pubDAO.getAllPublishers();
 		request.setAttribute("publishers", publishers);
@@ -23,7 +24,7 @@ public class AddBookLinkCommand implements Command {
 		List<Author> authors = authorDAO.getAllAuthors();
 		request.setAttribute("authors", authors);
 		
-		return "addBook.jsp";
+		request.getRequestDispatcher("addBook.jsp").forward(request, response);
 	}
 
 }

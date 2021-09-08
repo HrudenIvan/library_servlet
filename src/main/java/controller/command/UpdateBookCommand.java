@@ -1,20 +1,37 @@
 package controller.command;
 
+import java.io.IOException;
+import java.util.HashMap;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import model.DAO.AuthorDAO;
+import model.DAO.AuthorDAOImpl;
 import model.DAO.BookDAO;
 import model.DAO.BookDAOImpl;
+import model.DAO.PublisherDAO;
+import model.DAO.PublisherDAOImpl;
 import model.entity.Author;
 import model.entity.Book;
 import model.entity.Publisher;
+import util.Validator;
 
 public class UpdateBookCommand implements Command {
 
 	@Override
-	public String execute(HttpServletRequest request) {
+	public void execute(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		Book book = new Book();
 		book.setId(Long.valueOf(request.getParameter("bId")));
 		book.setTitle(request.getParameter("title"));
-		book.setQuantity(Integer.parseInt(request.getParameter("quantity")));
+		String quantity = request.getParameter("quantity");
+		if (quantity.isBlank()) {
+			book.setQuantity(0);
+		} else {
+			book.setQuantity(Integer.parseInt(quantity));
+		}
 		book.setAvailable(Integer.parseInt(request.getParameter("available")));
 		Author author = new Author();
 		author.setId(Long.valueOf(request.getParameter("aId")));
@@ -22,10 +39,31 @@ public class UpdateBookCommand implements Command {
 		Publisher publisher = new Publisher();
 		publisher.setId(Long.valueOf(request.getParameter("pId")));
 		book.setPublisher(publisher);
-		book.setReleaseDate(Integer.parseInt(request.getParameter("releaseDate")));
+		String releaseDate = request.getParameter("releaseDate");
+		if (releaseDate.isBlank()) {
+			book.setReleaseDate(0);
+		} else {
+			book.setReleaseDate(Integer.parseInt(releaseDate));
+		}
+		
+		PublisherDAO publisherDAO = PublisherDAOImpl.getInstance();
+		AuthorDAO authorDAO = AuthorDAOImpl.getInstance();
+		int oldQuantity = Integer.parseInt(request.getParameter("oldQuantity"));
+		HashMap<String, String> errors = new HashMap<String, String>();
+		if (!Validator.valideteAndUpdateBookUpdate(book, oldQuantity, errors)) {
+			request.setAttribute("authors", authorDAO.getAllAuthors());
+			request.setAttribute("publishers", publisherDAO.getAllPublishers());
+			request.setAttribute("book", book);
+			request.setAttribute("errors", errors);
+			
+			request.getRequestDispatcher("updateBook.jsp").forward(request, response);
+			return;
+		}
+		
 		BookDAO bookDAO = BookDAOImpl.getInstance();
 		bookDAO.updateBook(book);
-		return "main?action=getAllBooks";
+		
+		response.sendRedirect("main?action=getAllBooks");
 	}
 
 }

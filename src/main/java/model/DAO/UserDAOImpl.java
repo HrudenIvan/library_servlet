@@ -27,6 +27,8 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public User getUserByLogin(String login) {
 		User user = null;
+		if (login == null)
+			return null;
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.GET_USER_BY_LOGIN)) {
 			ps.setString(1, login);

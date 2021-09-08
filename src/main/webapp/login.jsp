@@ -44,19 +44,18 @@ ${navigation}
 <hr>
 	<h1>Please, login</h1>
 	<div>
-	<form action="main" method="post">
-		<input type="hidden" name="action" value="login">
+	<form action="main?action=login" method="post">
 		<table>
 			<tr>
 				<td>Login:</td>
-				<td><input type="text" name="login" ></td>
+				<td><input type="text" name="login" value="${login}"></td>
 			</tr>
 			<tr>
 				<td>Password:</td>
 				<td><input type="password" name="password"></td>
 			</tr>
 		</table>
-		${errorLoginMessage}
+		<label style="color:red">${errorLoginMessage}</label><br>
 		<input type="submit" value="submit">
 	</form>
 	</div>

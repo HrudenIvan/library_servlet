@@ -1,7 +1,12 @@
 package controller.command;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import model.DAO.AuthorDAO;
 import model.DAO.AuthorDAOImpl;
 import model.DAO.BookDAO;
@@ -15,7 +20,8 @@ import model.entity.Publisher;
 public class PrepareBookCommand implements Command {
 
 	@Override
-	public String execute(HttpServletRequest request) {
+	public void execute(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		BookDAO bookDAO = BookDAOImpl.getInstance();
 		long id = Long.valueOf(request.getParameter("bId"));
 		Book book = bookDAO.getBook(id);
@@ -29,7 +35,7 @@ public class PrepareBookCommand implements Command {
 		List<Author> authors = authorDAO.getAllAuthors();
 		request.setAttribute("authors", authors);
 
-		return "updateBook.jsp";
+		request.getRequestDispatcher("updateBook.jsp").forward(request, response);
 	}
 
 }

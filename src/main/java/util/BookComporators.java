@@ -1,6 +1,9 @@
 package util;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+
 import model.entity.Book;
 
 public class BookComporators {
@@ -8,6 +11,15 @@ public class BookComporators {
 	private BookComporators() {
 	}
 
+	public static List<BookComporators.Comparators> getAll(){
+		List<BookComporators.Comparators> comparators = new ArrayList<>();
+		for (BookComporators.Comparators comp : BookComporators.Comparators.values()) {
+			comparators.add(comp);
+		}
+		
+		return comparators;
+	}
+	
 	public static Comparator<Book> defineComparator(String sortOrder) {
 		if (sortOrder == null) {
 			return Comparators.YEARDESC.getComparator();

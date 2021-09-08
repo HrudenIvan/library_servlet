@@ -27,14 +27,19 @@ table, th, td {
 		<input type="hidden" name="action" value="getAllBooks">
 		Sort order: <select name="sortOrder">
 			<c:forEach var="comparator" items="${comparators}">
-				<option value="${comparator.name}">${comparator.title}</option>
+				<option value="${comparator.name}"
+					<c:set var="cn" value="${comparator.name}"/> 
+					<c:if test="${cn eq sortOrder}">
+						selected
+					</c:if>
+				>${comparator.title}</option>
 			</c:forEach>
 		</select>
 		<input type="submit" value="Sort">
 	</form>
 	<form action="main" method="get">
 		<input type="hidden" name="action" value="findBooksByTitle">
-		Find by title: <input type="text" name="title">
+		Find by title: <input type="text" name="title" value="${title}">
 		<input type="submit" value="Find">
 	</form>
 	<br>
