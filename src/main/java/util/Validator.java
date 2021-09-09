@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import model.entity.Author;
 import model.entity.Book;
+import model.entity.BookOrder;
 import model.entity.Publisher;
 import model.entity.User;
 
@@ -17,14 +18,60 @@ public class Validator {
 	private Validator() {
 	}
 
-	public static boolean validatePublisher(Publisher publisher, HashMap<String, String> errors) {
+	public static boolean validateAndUpdateBookOrder(BookOrder bookOrder, int oldOsId, LocalDate oldCloseDate,
+			HashMap<String, String> errors) {
 		boolean result;
-		
-		result = validatePublisherName(publisher.getName(), errors);
-		
+
+		result = validateOrderStatus(bookOrder, oldOsId, errors);
+		result = validateCloseDate(bookOrder, oldCloseDate, oldOsId, errors) && result;
+
 		return result;
 	}
-	
+
+	private static boolean validateCloseDate(BookOrder bookOrder, LocalDate oldCloseDate,
+			int oldOsId, HashMap<String, String> errors) {
+		boolean result = true;
+
+		if (bookOrder.getOrderStatus().getId() > 2) {
+			if (bookOrder.getCloseDate() == null) {
+				result = false;
+				errors.put("closeDate", "Close date must not be empty!");
+			} else if (bookOrder.getCloseDate().isBefore(LocalDate.now())) {
+				result = false;
+				errors.put("closeDate", "Close date must be equal or greater then current date!");
+			} else if (oldOsId != 2 && bookOrder.getCloseDate().isBefore(oldCloseDate)) {
+				result = false;
+				bookOrder.setCloseDate(oldCloseDate);
+				errors.put("closeDate", "Close date must be equal or greater than previous close date!");
+			} else if ("reading room".equals(bookOrder.getOrderType())
+					&& !bookOrder.getCloseDate().equals(bookOrder.getOpenDate())) {
+				result = false;
+				errors.put("closeDate", "Close date for reading room must be equal to open date!");
+			}
+		}
+		return result;
+	}
+
+	private static boolean validateOrderStatus(BookOrder bookOrder, int oldOsId, HashMap<String, String> errors) {
+		boolean result = true;
+
+		if (bookOrder.getOrderStatus().getId() - oldOsId < 0) {
+			result = false;
+			errors.put("orderStatus", "Order`s satus must not be changed in backwards order!");
+			bookOrder.getOrderStatus().setId(oldOsId);
+		}
+
+		return result;
+	}
+
+	public static boolean validatePublisher(Publisher publisher, HashMap<String, String> errors) {
+		boolean result;
+
+		result = validatePublisherName(publisher.getName(), errors);
+
+		return result;
+	}
+
 	private static boolean validatePublisherName(String name, HashMap<String, String> errors) {
 		boolean result = true;
 
@@ -48,12 +95,12 @@ public class Validator {
 
 		return result;
 	}
-	
+
 	private static boolean validateAndUpdateQuantity(Book book, int oldQuantity, HashMap<String, String> errors) {
 		boolean result = true;
 
 		int delta = book.getQuantity() - oldQuantity;
-		if ( delta + book.getAvailable() < 0) {
+		if (delta + book.getAvailable() < 0) {
 			result = false;
 			book.setQuantity(oldQuantity);
 			errors.put("quantity", "Quantity can not be changed more than available amount!");

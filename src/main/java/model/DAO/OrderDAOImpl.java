@@ -218,9 +218,6 @@ public class OrderDAOImpl implements OrderDAO {
 					orderStatus.setStatus(rs.getString(k++));
 					bookOrder.setOrderStatus(orderStatus);
 					bookOrder.calculatePenalty();
-					if (bookOrder.getOpenDate() == null) {
-						bookOrder.setOpenDate(LocalDate.now());
-					}
 				}
 			}
 		} catch (SQLException e) {

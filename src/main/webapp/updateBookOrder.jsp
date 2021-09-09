@@ -14,18 +14,27 @@
 	<form action="main?action=updateBookOrder" method="post">
 		<input type="hidden" name="uId" value="${bookOrder.userId}">
 		<input type="hidden" name="bId" value="${bookOrder.bookId}">
-		Order date:<input type="datetime-local" value="${bookOrder.orderDate}" readonly><br>
-		Book title:<input type="text" value="${bookOrder.bookTitle}" readonly><br>
-		Order type:<input type="text" value="${bookOrder.orderType}" readonly><br>
+		Order date:<input type="datetime-local" name="orderDate" value="${bookOrder.orderDate}" readonly><br>
+		Book title:<input type="text" name="title" value="${bookOrder.bookTitle}" readonly><br>
+		Order type:<input type="text" name="orderType" value="${bookOrder.orderType}" readonly><br>
 		Open date:<input type="date" name="openDate" value="${bookOrder.openDate}" readonly><br>
-		Close date:<input type="date" name="closeDate" value="${bookOrder.closeDate}"><br>
-		Penalty:<input type="text" value="${bookOrder.penalty}" readonly><br>
+		Close date:<input type="date" name="closeDate" value="${bookOrder.closeDate}">
+		<input type="hidden" name="oldCloseDate" value="${bookOrder.closeDate}">
+		<label style="color:red">${errors.closeDate}</label><br>
+		Penalty:<input type="text" name="penalty" value="${bookOrder.penalty}" readonly><br>
 		Order status: <select name="osId">
-			<option value="${bookOrder.orderStatus.id}" selected>${bookOrder.orderStatus.status}</option>
+			<c:set var="osId" value="${bookOrder.orderStatus.id}"/>
 			<c:forEach var="orderStatus" items="${orderStatuses}">
-				<option value="${orderStatus.id}">${orderStatus.status}</option>
+				<c:set var="curOsId" value="${orderStatus.id}"/>
+				<option value="${orderStatus.id}"
+					<c:if test="${osId == curOsId}">
+						selected
+					</c:if>
+				>${orderStatus.status}</option>
 			</c:forEach>
-		</select><br><br>
+		</select>
+		<label style="color:red">${errors.orderStatus}</label>
+		<input type="hidden" name="oldOsId" value="${bookOrder.orderStatus.id}"><br><br>
 		<input type="submit" value="Update">
 	</form>
 
