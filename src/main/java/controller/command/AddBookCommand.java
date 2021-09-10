@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.AuthorDAO;
 import model.DAO.AuthorDAOImpl;
 import model.DAO.BookDAO;
@@ -23,11 +24,11 @@ public class AddBookCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		Book book = new Book();
-		book.setTitle(request.getParameter("title"));
-		String total = request.getParameter("total");
-		if (total.isBlank()) {
+		book.setTitle(request.getParameter("title").trim());
+		String total = request.getParameter("total").trim();
+		if (total.isEmpty()) {
 			book.setQuantity(0);
 		} else {
 			book.setQuantity(Integer.parseInt(total));
@@ -40,7 +41,7 @@ public class AddBookCommand implements Command {
 		publisher.setId(Long.valueOf(request.getParameter("pId")));
 		book.setPublisher(publisher);
 		String releaseDate = request.getParameter("releaseDate");
-		if (releaseDate.isBlank()) {
+		if (releaseDate.isEmpty()) {
 			book.setReleaseDate(0);
 		} else {
 			book.setReleaseDate(Integer.parseInt(releaseDate));
@@ -49,7 +50,7 @@ public class AddBookCommand implements Command {
 		PublisherDAO publisherDAO = PublisherDAOImpl.getInstance();
 		AuthorDAO authorDAO = AuthorDAOImpl.getInstance();
 		HashMap<String, String> errors = new HashMap<String, String>();
-		if (!Validator.valideteBook(book, errors)) {
+		if (!Validator.valideteBook(request, book, errors)) {
 			request.setAttribute("aId", book.getAuthor().getId());
 			request.setAttribute("pId", book.getPublisher().getId());
 			request.setAttribute("authors", authorDAO.getAllAuthors());

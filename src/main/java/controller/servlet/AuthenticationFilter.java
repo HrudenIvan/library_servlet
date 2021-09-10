@@ -22,15 +22,15 @@ public class AuthenticationFilter implements Filter {
 	private EnumSet<CommandEnum> adminCommands;
 	
 	public AuthenticationFilter() {
-		guestCommands = EnumSet.of(LOGIN, GETALLBOOKS, ADDUSER, REGISTER, DEFAULT, FINDBOOKSBYTITLE);
+		guestCommands = EnumSet.of(LOGIN, GETALLBOOKS, ADDUSER, REGISTER, DEFAULT, FINDBOOKSBYTITLE, CHANGELOCALE);
 		userCommands = EnumSet.of(LOGOUT, GETALLBOOKS, DEFAULT, PREPAREBOOKORDER,
-				ADDBOOKORDER, PREPARECABINET, FINDBOOKSBYTITLE);
+				ADDBOOKORDER, PREPARECABINET, FINDBOOKSBYTITLE, CHANGELOCALE);
 		librarianCommands = EnumSet.of(LOGOUT, DEFAULT, PREPARELIBRARIAN, PREPAREBOOKORDERUPDATE,
-				UPDATEBOOKORDER, SUBSCRIPTION);
+				UPDATEBOOKORDER, SUBSCRIPTION, CHANGELOCALE);
 		adminCommands = EnumSet.of(LOGOUT, GETALLBOOKS, GETALLUSERS, UPDATEUSER, PREPAREUSER,
 				PREPAREBOOK, UPDATEBOOK, ADDUSER, GETALLAUTHORS, PREPAREAUTHOR, UPDATEAUTHOR,
 				ADDAUTHORLINK, ADDAUTHOR, ADDBOOKLINK, ADDBOOK, ADDPUBLISHERLINK, ADDPUBLISHER,
-				PREPAREPUBLISHER, UPDATEPUBLISHER, GETALLPUBLISHERS, FINDBOOKSBYTITLE, DEFAULT);
+				PREPAREPUBLISHER, UPDATEPUBLISHER, GETALLPUBLISHERS, FINDBOOKSBYTITLE, DEFAULT, CHANGELOCALE);
 	}
 	
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -49,7 +49,20 @@ public class AuthenticationFilter implements Filter {
 		
 		HttpSession session = req.getSession();
 		String userType = (String) session.getAttribute("currentUserType");
+		boolean isBlocked = (boolean) session.getAttribute("isBlocked");
+		
 		CommandEnum command = CommandEnum.valueOf(action.toUpperCase());
+		
+		if (isBlocked && command != CommandEnum.LOGOUT) {
+			if ("user".equals(userType)) {
+				req.getRequestDispatcher("main?action=prepareCabinet").forward(request, response);
+				return;
+			} else {
+				req.getRequestDispatcher("main?action=default").forward(request, response);
+				return;
+			}
+		}
+		
 		
 		if ("guest".equals(userType) && !guestCommands.contains(command)) {
 			req.getRequestDispatcher("main?action=default").forward(request, response);

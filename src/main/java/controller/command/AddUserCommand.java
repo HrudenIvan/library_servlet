@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import Exception.DBException;
 import controller.util.UserNavigation;
 import model.DAO.UserDAO;
 import model.DAO.UserDAOImpl;
@@ -20,7 +21,7 @@ public class AddUserCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		User user = new User();
 		user.setLogin(request.getParameter("login"));
 		user.setFirstName(request.getParameter("firstName"));
@@ -33,8 +34,8 @@ public class AddUserCommand implements Command {
 		String password1 = request.getParameter("password1");
 		
 		HashMap<String, String> errors = new HashMap<String, String>();
-		if (!Validator.validateUser(user, errors) || 
-				!Validator.validatePassword(password, password1, errors)) {
+		if (!Validator.validateUser(request, user, errors) || 
+				!Validator.validatePassword(request, password, password1, errors)) {
 			request.setAttribute("errors", errors);
 			request.setAttribute("user", user);
 

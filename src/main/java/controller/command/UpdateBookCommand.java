@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.AuthorDAO;
 import model.DAO.AuthorDAOImpl;
 import model.DAO.BookDAO;
@@ -22,12 +23,12 @@ public class UpdateBookCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		Book book = new Book();
 		book.setId(Long.valueOf(request.getParameter("bId")));
-		book.setTitle(request.getParameter("title"));
-		String quantity = request.getParameter("quantity");
-		if (quantity.isBlank()) {
+		book.setTitle(request.getParameter("title").trim());
+		String quantity = request.getParameter("quantity").trim();
+		if (quantity.isEmpty()) {
 			book.setQuantity(0);
 		} else {
 			book.setQuantity(Integer.parseInt(quantity));
@@ -40,7 +41,7 @@ public class UpdateBookCommand implements Command {
 		publisher.setId(Long.valueOf(request.getParameter("pId")));
 		book.setPublisher(publisher);
 		String releaseDate = request.getParameter("releaseDate");
-		if (releaseDate.isBlank()) {
+		if (releaseDate.isEmpty()) {
 			book.setReleaseDate(0);
 		} else {
 			book.setReleaseDate(Integer.parseInt(releaseDate));
@@ -50,7 +51,7 @@ public class UpdateBookCommand implements Command {
 		AuthorDAO authorDAO = AuthorDAOImpl.getInstance();
 		int oldQuantity = Integer.parseInt(request.getParameter("oldQuantity"));
 		HashMap<String, String> errors = new HashMap<String, String>();
-		if (!Validator.valideteAndUpdateBookUpdate(book, oldQuantity, errors)) {
+		if (!Validator.valideteAndUpdateBookUpdate(request, book, oldQuantity, errors)) {
 			request.setAttribute("authors", authorDAO.getAllAuthors());
 			request.setAttribute("publishers", publisherDAO.getAllPublishers());
 			request.setAttribute("book", book);

@@ -2,16 +2,17 @@ package model.DAO;
 
 import java.util.List;
 
+import Exception.DBException;
 import model.entity.Publisher;
 
 public interface PublisherDAO {
 	
-	Publisher getPublisher(long id);
+	Publisher getPublisher(long id) throws DBException;
 	
-	List<Publisher> getAllPublishers();
+	List<Publisher> getAllPublishers() throws DBException;
 	
-	void addPublisher(Publisher publisher);
+	void addPublisher(Publisher publisher) throws DBException;
 	
-	void updatePublisher(Publisher publisher);
+	void updatePublisher(Publisher publisher) throws DBException;
 
 }

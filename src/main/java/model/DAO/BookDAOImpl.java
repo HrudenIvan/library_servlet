@@ -7,6 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import Exception.DBException;
 import model.Constants;
 import model.PooledConnections;
 import model.entity.Author;
@@ -15,6 +20,11 @@ import model.entity.Publisher;
 
 public class BookDAOImpl implements BookDAO {
 	private static BookDAO instance;
+	private static final Logger logger;
+
+	static {
+		logger = LogManager.getLogger(BookDAOImpl.class.getName());
+	}
 
 	public static synchronized BookDAO getInstance() {
 		if (instance == null) {
@@ -24,7 +34,7 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public List<Book> getAllBooks() {
+	public List<Book> getAllBooks() throws DBException {
 		List<Book> books = new ArrayList<Book>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement statement = con.createStatement();
@@ -49,14 +59,14 @@ public class BookDAOImpl implements BookDAO {
 				books.add(book);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get all books", e);
+			throw new DBException("Can`t get all books", e);
 		}
 		return books;
 	}
 
 	@Override
-	public Book getBook(long id) {
+	public Book getBook(long id) throws DBException {
 		Book book = null;
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.GET_BOOK_BY_ID)) {
@@ -82,14 +92,14 @@ public class BookDAOImpl implements BookDAO {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get book", e);
+			throw new DBException("Can`t get book", e);
 		}
 		return book;
 	}
 
 	@Override
-	public void updateBook(Book book) {
+	public void updateBook(Book book) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.UPDATE_BOOK)) {
 			int k = 1;
@@ -102,14 +112,14 @@ public class BookDAOImpl implements BookDAO {
 			ps.setLong(k++, book.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t update book", e);
+			throw new DBException("Can`t update book", e);
 		}
-		
+
 	}
 
 	@Override
-	public void addBook(Book book) {
+	public void addBook(Book book) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.ADD_BOOK,
 						PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -126,17 +136,17 @@ public class BookDAOImpl implements BookDAO {
 				book.setId(rs.getLong(1));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t create book", e);
+			throw new DBException("Can`t create book", e);
 		}
 	}
 
 	@Override
-	public List<Book> findBooksByTitle(String title) {
+	public List<Book> findBooksByTitle(String title) throws DBException {
 		List<Book> books = new ArrayList<Book>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.GET_BOOKS_BY_TITLE)) {
-			ps.setString(1, "%"+title+"%");
+			ps.setString(1, "%" + title + "%");
 			try (ResultSet rs = ps.executeQuery()) {
 				while (rs.next()) {
 					Book book = new Book();
@@ -159,8 +169,8 @@ public class BookDAOImpl implements BookDAO {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t finde book by title", e);
+			throw new DBException("Can`t finde book by title", e);
 		}
 		return books;
 	}

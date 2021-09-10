@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.OrderDAO;
 import model.DAO.OrderDAOImpl;
 import model.DAO.UserDAO;
@@ -18,7 +19,7 @@ public class PrepareLibrarianCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		OrderDAO orderDAO = OrderDAOImpl.getInstance();
 		List<BookOrder> bookOrders = orderDAO.getNewBookOrders();
 		request.setAttribute("bookOrders", bookOrders);

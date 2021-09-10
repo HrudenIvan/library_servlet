@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.PublisherDAO;
 import model.DAO.PublisherDAOImpl;
 import model.entity.Publisher;
@@ -16,12 +17,12 @@ public class AddPublisherCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		Publisher publisher = new Publisher();
 		publisher.setName(request.getParameter("name"));
 		
 		HashMap<String, String> errors = new HashMap<String, String>();
-		if (!Validator.validatePublisher(publisher, errors)) {
+		if (!Validator.validatePublisher(request, publisher, errors)) {
 			request.setAttribute("publisher", publisher);
 			request.setAttribute("errors", errors);
 			

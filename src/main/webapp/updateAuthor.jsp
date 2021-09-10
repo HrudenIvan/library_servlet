@@ -1,22 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="updateAuthor"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Update Author</title>
+<title><fmt:message key="title"/></title>
 </head>
 <body>
 	${navigation}
 	<hr>
-	<h1>Update Author</h1>
+	<h1><fmt:message key="header"/></h1>
 	<form action="main?action=updateAuthor" method="post">
 		<input type="hidden" name="aId" value="${author.id}">
-		First name: <input type="text" name="firstName" value="${author.firstName}">
+		<fmt:message key="firstName"/> <input type="text" name="firstName" value="${author.firstName}">
 		<label style="color:red">${errors.firstname}</label><br>
-		Last name: <input type="text" name="lastName" value="${author.lastName}">
+		<fmt:message key="lastName"/> <input type="text" name="lastName" value="${author.lastName}">
 		<label style="color:red">${errors.lastname}</label><br><br>
-		<input type="submit" value="Update">
+		<input type="submit" value="<fmt:message key="button"/>">
 	</form>
 </body>
 </html>

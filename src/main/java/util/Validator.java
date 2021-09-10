@@ -2,6 +2,8 @@ package util;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
+
 import model.entity.Author;
 import model.entity.Book;
 import model.entity.BookOrder;
@@ -18,92 +20,100 @@ public class Validator {
 	private Validator() {
 	}
 
-	public static boolean validateAndUpdateBookOrder(BookOrder bookOrder, int oldOsId, LocalDate oldCloseDate,
-			HashMap<String, String> errors) {
+	public static boolean validateAndUpdateBookOrder(HttpServletRequest request, BookOrder bookOrder, int oldOsId,
+			LocalDate oldCloseDate, HashMap<String, String> errors) {
 		boolean result;
 
-		result = validateOrderStatus(bookOrder, oldOsId, errors);
-		result = validateCloseDate(bookOrder, oldCloseDate, oldOsId, errors) && result;
+		result = validateOrderStatus(request, bookOrder, oldOsId, errors);
+		result = validateCloseDate(request, bookOrder, oldCloseDate, oldOsId, errors) && result;
 
 		return result;
 	}
 
-	private static boolean validateCloseDate(BookOrder bookOrder, LocalDate oldCloseDate,
+	private static boolean validateCloseDate(HttpServletRequest request, BookOrder bookOrder, LocalDate oldCloseDate,
 			int oldOsId, HashMap<String, String> errors) {
 		boolean result = true;
 
 		if (bookOrder.getOrderStatus().getId() > 2) {
 			if (bookOrder.getCloseDate() == null) {
 				result = false;
-				errors.put("closeDate", "Close date must not be empty!");
+				bookOrder.setCloseDate(oldCloseDate);
+				errors.put("closeDate", Localizer.getString(request, "validation.closedate.empty"));
 			} else if (bookOrder.getCloseDate().isBefore(LocalDate.now())) {
 				result = false;
-				errors.put("closeDate", "Close date must be equal or greater then current date!");
-			} else if (oldOsId != 2 && bookOrder.getCloseDate().isBefore(oldCloseDate)) {
+				bookOrder.setCloseDate(oldCloseDate);
+				errors.put("closeDate", Localizer.getString(request, "validation.closedate.before"));
+			} else if (bookOrder.getCloseDate().isBefore(oldCloseDate)) {
 				result = false;
 				bookOrder.setCloseDate(oldCloseDate);
-				errors.put("closeDate", "Close date must be equal or greater than previous close date!");
+				errors.put("closeDate", Localizer.getString(request, "validation.closedate.after"));
 			} else if ("reading room".equals(bookOrder.getOrderType())
 					&& !bookOrder.getCloseDate().equals(bookOrder.getOpenDate())) {
 				result = false;
-				errors.put("closeDate", "Close date for reading room must be equal to open date!");
+				bookOrder.setCloseDate(oldCloseDate);
+				errors.put("closeDate", Localizer.getString(request, "validation.closedate.readingroom"));
 			}
 		}
 		return result;
 	}
 
-	private static boolean validateOrderStatus(BookOrder bookOrder, int oldOsId, HashMap<String, String> errors) {
+	private static boolean validateOrderStatus(HttpServletRequest request, BookOrder bookOrder, int oldOsId,
+			HashMap<String, String> errors) {
 		boolean result = true;
 
 		if (bookOrder.getOrderStatus().getId() - oldOsId < 0) {
 			result = false;
-			errors.put("orderStatus", "Order`s satus must not be changed in backwards order!");
+			errors.put("orderStatus", Localizer.getString(request, "validation.orderstatus.order"));
 			bookOrder.getOrderStatus().setId(oldOsId);
 		}
 
 		return result;
 	}
 
-	public static boolean validatePublisher(Publisher publisher, HashMap<String, String> errors) {
+	public static boolean validatePublisher(HttpServletRequest request, Publisher publisher,
+			HashMap<String, String> errors) {
 		boolean result;
 
-		result = validatePublisherName(publisher.getName(), errors);
+		result = validatePublisherName(request, publisher.getName(), errors);
 
 		return result;
 	}
 
-	private static boolean validatePublisherName(String name, HashMap<String, String> errors) {
+	private static boolean validatePublisherName(HttpServletRequest request, String name,
+			HashMap<String, String> errors) {
 		boolean result = true;
 
-		if (name.isBlank()) {
+		if (name.isEmpty()) {
 			result = false;
-			errors.put("name", "Name can not be empty!");
+			errors.put("name", Localizer.getString(request, "validation.pablisher.name.empty"));
 		} else if (name.length() > 45) {
 			result = false;
-			errors.put("name", "Name must be shorter than 45 characters!");
+			errors.put("name", Localizer.getString(request, "validation.pablisher.name.lenght"));
 		}
 
 		return result;
 	}
 
-	public static boolean valideteAndUpdateBookUpdate(Book book, int oldQuantity, HashMap<String, String> errors) {
+	public static boolean valideteAndUpdateBookUpdate(HttpServletRequest request, Book book, int oldQuantity,
+			HashMap<String, String> errors) {
 		boolean result;
 
-		result = validateTitle(book.getTitle(), errors);
-		result = validateAndUpdateQuantity(book, oldQuantity, errors) && result;
-		result = validateReleaseDate(book.getReleaseDate(), errors) && result;
+		result = validateTitle(request, book.getTitle(), errors);
+		result = validateAndUpdateQuantity(request, book, oldQuantity, errors) && result;
+		result = validateReleaseDate(request, book.getReleaseDate(), errors) && result;
 
 		return result;
 	}
 
-	private static boolean validateAndUpdateQuantity(Book book, int oldQuantity, HashMap<String, String> errors) {
+	private static boolean validateAndUpdateQuantity(HttpServletRequest request, Book book, int oldQuantity,
+			HashMap<String, String> errors) {
 		boolean result = true;
 
 		int delta = book.getQuantity() - oldQuantity;
 		if (delta + book.getAvailable() < 0) {
 			result = false;
 			book.setQuantity(oldQuantity);
-			errors.put("quantity", "Quantity can not be changed more than available amount!");
+			errors.put("quantity", Localizer.getString(request, "validation.quantity.update"));
 		} else {
 			book.setAvailable(book.getAvailable() + delta);
 		}
@@ -111,76 +121,78 @@ public class Validator {
 		return result;
 	}
 
-	public static boolean valideteBook(Book book, HashMap<String, String> errors) {
+	public static boolean valideteBook(HttpServletRequest request, Book book, HashMap<String, String> errors) {
 		boolean result;
 
-		result = validateTitle(book.getTitle(), errors);
-		result = validateQuantity(book.getQuantity(), errors) && result;
-		result = validateReleaseDate(book.getReleaseDate(), errors) && result;
+		result = validateTitle(request, book.getTitle(), errors);
+		result = validateQuantity(request, book.getQuantity(), errors) && result;
+		result = validateReleaseDate(request, book.getReleaseDate(), errors) && result;
 
 		return result;
 	}
 
-	private static boolean validateReleaseDate(int releaseDate, HashMap<String, String> errors) {
+	private static boolean validateReleaseDate(HttpServletRequest request, int releaseDate,
+			HashMap<String, String> errors) {
 		boolean result = true;
 
 		if (LocalDate.now().getYear() < releaseDate) {
 			result = false;
-			errors.put("releaseDate", "Release date must be lesser or equal than current year!");
+			errors.put("releaseDate", Localizer.getString(request, "validation.releasedate"));
 		}
 
 		return result;
 	}
 
-	private static boolean validateQuantity(int quantity, HashMap<String, String> errors) {
+	private static boolean validateQuantity(HttpServletRequest request, int quantity, HashMap<String, String> errors) {
 		boolean result = true;
 
 		if (quantity < 1) {
 			result = false;
-			errors.put("quantity", "Quantity must be greater than zero!");
+			errors.put("quantity", Localizer.getString(request, "validation.quantity.add"));
 		}
 
 		return result;
 	}
 
-	private static boolean validateTitle(String title, HashMap<String, String> errors) {
+	private static boolean validateTitle(HttpServletRequest request, String title, HashMap<String, String> errors) {
 		boolean result = true;
 
-		if (title.isBlank()) {
+		if (title.isEmpty()) {
 			result = false;
-			errors.put("title", "Title can not be empty!");
+			errors.put("title", Localizer.getString(request, "validation.title.empty"));
 		} else if (title.length() > 45) {
 			result = false;
-			errors.put("title", "Title must be shorter than 45 characters!");
+			errors.put("title", Localizer.getString(request, "validation.title.length"));
 		}
 
 		return result;
 	}
 
-	public static boolean validateAuthor(Author author, HashMap<String, String> errors) {
+	public static boolean validateAuthor(HttpServletRequest request, Author author, HashMap<String, String> errors) {
 		boolean result;
 
-		result = validateName("Firstname", author.getFirstName(), errors);
-		result = validateName("Lastname", author.getLastName(), errors) && result;
+		result = validateFirstName(request, author.getFirstName(), errors);
+		result = validateLastName(request, author.getLastName(), errors) && result;
 
 		return result;
 	}
 
-	public static boolean validatePassword(String password1, String password2, HashMap<String, String> errors) {
+	public static boolean validatePassword(HttpServletRequest request, String password1, String password2,
+			HashMap<String, String> errors) {
 		boolean result = true;
 		StringBuilder message = new StringBuilder();
 
-		if (password1 == null || password1.isBlank()) {
+		if (password1 == null || password1.isEmpty()) {
 			result = false;
-			message.append("Password must not be empty");
+			message.append(Localizer.getString(request, "validation.password.empty"));
 		} else {
 			if (!password1.equals(password2)) {
 				result = false;
-				message.append("Both passwords must be equal!");
+				message.append(Localizer.getString(request, "validation.password.equal"));
 			}
 			if (!password1.matches(PASSWORD_REGEX)) {
 				result = false;
-				message.append(" Password must contain at least 10 latin characters or numbers!");
+				message.append(Localizer.getString(request, "validation.password.regex"));
 			}
 		}
 		if (!result) {
@@ -190,51 +202,65 @@ public class Validator {
 		return result;
 	}
 
-	public static boolean validateUser(User user, HashMap<String, String> errors) {
+	public static boolean validateUser(HttpServletRequest request, User user, HashMap<String, String> errors) {
 		boolean result;
 
-		result = validateLogin(user.getLogin(), errors);
-		result = validateName("Firstname", user.getFirstName(), errors) && result;
-		result = validateName("Lastname", user.getLastName(), errors) && result;
-		result = validatePenalty(user.getPenalty(), errors) && result;
+		result = validateLogin(request, user.getLogin(), errors);
+		result = validateFirstName(request, user.getFirstName(), errors) && result;
+		result = validateLastName(request, user.getLastName(), errors) && result;
+		result = validatePenalty(request, user.getPenalty(), errors) && result;
 
 		return result;
 	}
 
-	private static boolean validatePenalty(double penalty, HashMap<String, String> errors) {
+	private static boolean validatePenalty(HttpServletRequest request, double penalty, HashMap<String, String> errors) {
 		boolean result = true;
 
 		if (penalty < 0) {
 			result = false;
-			errors.put("penalty", "Penalty must be greater or equal zero!");
+			errors.put("penalty", Localizer.getString(request, "validation.penalty"));
 		}
 
 		return result;
 	}
 
-	private static boolean validateLogin(String login, HashMap<String, String> errors) {
+	private static boolean validateLogin(HttpServletRequest request, String login, HashMap<String, String> errors) {
 		boolean result = true;
 
-		if (login == null || login.isBlank()) {
+		if (login == null || login.isEmpty()) {
 			result = false;
-			errors.put("login", "Login must not be empty!");
+			errors.put("login", Localizer.getString(request, "validation.login.empty"));
 		} else if (!login.matches(LOGIN_REGEX)) {
 			result = false;
-			errors.put("login", "Login must contain form 1 to 20 latin characters or numbers!");
+			errors.put("login", Localizer.getString(request, "validation.login.regex"));
 		}
 
 		return result;
 	}
 
-	private static boolean validateName(String fieldName, String field, HashMap<String, String> errors) {
+	private static boolean validateFirstName(HttpServletRequest request, String field, HashMap<String, String> errors) {
 		boolean result = true;
 
-		if (field == null || field.isBlank()) {
+		if (field == null || field.isEmpty()) {
 			result = false;
-			errors.put(fieldName.toLowerCase(), fieldName + " must not be empty!");
+			errors.put("firstname", Localizer.getString(request, "validation.firstname.empty"));
 		} else if (field.length() > 30) {
 			result = false;
-			errors.put(fieldName.toLowerCase(), fieldName + " must be shorter then 30 characters!");
+			errors.put("firstname", Localizer.getString(request, "validation.firstname.length"));
+		}
+
+		return result;
+	}
+
+	private static boolean validateLastName(HttpServletRequest request, String field, HashMap<String, String> errors) {
+		boolean result = true;
+
+		if (field == null || field.isEmpty()) {
+			result = false;
+			errors.put("lastname", Localizer.getString(request, "validation.lastname.empty"));
+		} else if (field.length() > 30) {
+			result = false;
+			errors.put("lastname", Localizer.getString(request, "validation.lastname.length"));
 		}
 
 		return result;

@@ -9,6 +9,11 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import Exception.DBException;
 import model.Constants;
 import model.PooledConnections;
 import model.entity.BookOrder;
@@ -17,6 +22,11 @@ import model.entity.OrderType;
 
 public class OrderDAOImpl implements OrderDAO {
 	private static OrderDAO instance;
+	private static final Logger logger;
+
+	static {
+		logger = LogManager.getLogger(OrderDAOImpl.class.getName());
+	}
 
 	private OrderDAOImpl() {
 	}
@@ -29,7 +39,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public List<OrderType> getAllOrderTypes() {
+	public List<OrderType> getAllOrderTypes() throws DBException {
 		List<OrderType> orderTypes = new ArrayList<OrderType>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement st = con.createStatement();
@@ -42,14 +52,14 @@ public class OrderDAOImpl implements OrderDAO {
 				orderTypes.add(orderType);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get all order types", e);
+			throw new DBException("Can`t get all order types", e);
 		}
 		return orderTypes;
 	}
 
 	@Override
-	public List<OrderStatus> getAllOrderStatuses() {
+	public List<OrderStatus> getAllOrderStatuses() throws DBException {
 		List<OrderStatus> orderStatuses = new ArrayList<OrderStatus>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement st = con.createStatement();
@@ -62,14 +72,14 @@ public class OrderDAOImpl implements OrderDAO {
 				orderStatuses.add(orderStatus);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get all order statuses", e);
+			throw new DBException("Can`t get all order statuses", e);
 		}
 		return orderStatuses;
 	}
 
 	@Override
-	public void addOrder(Long userId, Long bookId, int orderTypeId) {
+	public void addOrder(Long userId, Long bookId, int orderTypeId) throws DBException {
 		Connection con = null;
 		try {
 			con = PooledConnections.getInstance().getConnection();
@@ -79,8 +89,8 @@ public class OrderDAOImpl implements OrderDAO {
 			con.commit();
 		} catch (SQLException e) {
 			rollback(con);
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t create new book order", e);
+			throw new DBException("Can`t create new book order", e);
 		} finally {
 			close(con);
 		}
@@ -91,9 +101,8 @@ public class OrderDAOImpl implements OrderDAO {
 		if (con != null) {
 			try {
 				con.close();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (SQLException e) {
+				logger.warn("Can`t close connection", e);
 			}
 		}
 	}
@@ -102,9 +111,8 @@ public class OrderDAOImpl implements OrderDAO {
 		if (con != null) {
 			try {
 				con.rollback();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (SQLException e) {
+				logger.warn("Can`t roolback transaction", e);
 			}
 		}
 	}
@@ -129,7 +137,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public List<BookOrder> getUserOrders(long userId) {
+	public List<BookOrder> getUserOrders(long userId) throws DBException {
 		List<BookOrder> bookOrders = new ArrayList<BookOrder>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement st = con.prepareStatement(Constants.GET_ALL_USER_ORDERS)) {
@@ -155,8 +163,8 @@ public class OrderDAOImpl implements OrderDAO {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get user`s orders", e);
+			throw new DBException("Can`t get user`s orders", e);
 		}
 		return bookOrders;
 	}
@@ -166,7 +174,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public List<BookOrder> getNewBookOrders() {
+	public List<BookOrder> getNewBookOrders() throws DBException {
 		List<BookOrder> bookOrders = new ArrayList<BookOrder>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement st = con.createStatement();
@@ -189,14 +197,14 @@ public class OrderDAOImpl implements OrderDAO {
 				bookOrders.add(bookOrder);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get new book orders", e);
+			throw new DBException("Can`t get new book orders", e);
 		}
 		return bookOrders;
 	}
 
 	@Override
-	public BookOrder getBookOrder(Long userId, Long bookId) {
+	public BookOrder getBookOrder(Long userId, Long bookId) throws DBException {
 		BookOrder bookOrder = null;
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement st = con.prepareStatement(Constants.GET_BOOK_ORDER)) {
@@ -221,14 +229,14 @@ public class OrderDAOImpl implements OrderDAO {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get book order", e);
+			throw new DBException("Can`t get book orders", e);
 		}
 		return bookOrder;
 	}
 
 	@Override
-	public void updateBookOrder(BookOrder bookOrder) {
+	public void updateBookOrder(BookOrder bookOrder) throws DBException {
 		Connection con = null;
 		try {
 			con = PooledConnections.getInstance().getConnection();
@@ -241,8 +249,8 @@ public class OrderDAOImpl implements OrderDAO {
 			con.commit();
 		} catch (SQLException e) {
 			rollback(con);
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t update book order", e);
+			throw new DBException("Can`t update book order", e);
 		} finally {
 			close(con);
 		}
@@ -273,7 +281,7 @@ public class OrderDAOImpl implements OrderDAO {
 				append(bookOrder.getOrderStatus().getId());
 		if (bookOrder.getOrderStatus().getId() == 3) {
 			result.append(", open_date = \"").
-				append(LocalDate.now().toString()).
+				append(bookOrder.getOpenDate().toString()).
 				append("\", close_date = \"").
 				append(bookOrder.getCloseDate().toString()).
 				append("\"");
@@ -291,7 +299,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public List<BookOrder> getUserOpenBookOrders(Long userId) {
+	public List<BookOrder> getUserOpenBookOrders(Long userId) throws DBException {
 		List<BookOrder> bookOrders = new ArrayList<BookOrder>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.GET_USER_OPEN_BOOK_ORDER)) {
@@ -316,8 +324,8 @@ public class OrderDAOImpl implements OrderDAO {
 				}
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get user`s open book orders", e);
+			throw new DBException("Can`t get user`s open book orders", e);
 		}
 		return bookOrders;
 	}

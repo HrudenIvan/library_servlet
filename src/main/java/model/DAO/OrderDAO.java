@@ -1,26 +1,28 @@
 package model.DAO;
 
 import java.util.List;
+
+import Exception.DBException;
 import model.entity.BookOrder;
 import model.entity.OrderStatus;
 import model.entity.OrderType;
 
 public interface OrderDAO {
 
-	List<OrderType> getAllOrderTypes();
+	List<OrderType> getAllOrderTypes() throws DBException;
 
-	List<OrderStatus> getAllOrderStatuses();
+	List<OrderStatus> getAllOrderStatuses() throws DBException;
 
-	void addOrder(Long userId, Long bookId, int orderTypeId);
+	void addOrder(Long userId, Long bookId, int orderTypeId) throws DBException;
 
-	List<BookOrder> getUserOrders(long id);
+	List<BookOrder> getUserOrders(long id) throws DBException;
 
-	List<BookOrder> getNewBookOrders();
+	List<BookOrder> getNewBookOrders() throws DBException;
 
-	BookOrder getBookOrder(Long userId, Long bookId);
+	BookOrder getBookOrder(Long userId, Long bookId) throws DBException;
 
-	void updateBookOrder(BookOrder bookOrder);
+	void updateBookOrder(BookOrder bookOrder) throws DBException;
 
-	List<BookOrder> getUserOpenBookOrders(Long userId);
+	List<BookOrder> getUserOpenBookOrders(Long userId) throws DBException;
 
 }

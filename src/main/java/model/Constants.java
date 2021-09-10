@@ -6,7 +6,7 @@ public class Constants {
 	}
 
 	public static final String GET_USER_BY_LOGIN =
-			  "SELECT u.id, ut.id, ut.type, u.password, u.salt "
+			  "SELECT u.id, ut.id, ut.type, u.password, u.salt, u.is_blocked "
 			+ "FROM library.user u "
 			+ "JOIN library.user_type ut "
 			+ "WHERE u.login = ? AND ut.id = u.user_type_id";

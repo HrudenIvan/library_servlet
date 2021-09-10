@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.BookDAO;
 import model.DAO.BookDAOImpl;
 import model.DAO.OrderDAO;
@@ -18,7 +19,7 @@ public class PrepareBookOrderCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		BookDAO bookDAO = BookDAOImpl.getInstance();
 		Long bookId = Long.valueOf(request.getParameter("bId"));
 		Book book = bookDAO.getBook(bookId);

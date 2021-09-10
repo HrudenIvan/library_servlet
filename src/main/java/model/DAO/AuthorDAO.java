@@ -2,15 +2,16 @@ package model.DAO;
 
 import java.util.List;
 
+import Exception.DBException;
 import model.entity.Author;
 
 public interface AuthorDAO {
-	Author getAuthor(long id);
+	Author getAuthor(long id) throws DBException;
 
-	List<Author> getAllAuthors();
+	List<Author> getAllAuthors() throws DBException;
 
-	void addAuthor(Author author);
+	void addAuthor(Author author) throws DBException;
 
-	void updateAuthor(Author author);
+	void updateAuthor(Author author) throws DBException;
 
 }

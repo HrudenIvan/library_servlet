@@ -7,12 +7,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import Exception.DBException;
 import model.PooledConnections;
 import model.entity.*;
 import model.*;
 
 public class UserDAOImpl implements UserDAO {
 	private static UserDAO instance;
+	private static final Logger logger;
+
+	static {
+		logger = LogManager.getLogger(UserDAOImpl.class.getName());
+	}
 
 	private UserDAOImpl() {
 	}
@@ -25,7 +35,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public User getUserByLogin(String login) {
+	public User getUserByLogin(String login) throws DBException {
 		User user = null;
 		if (login == null)
 			return null;
@@ -43,16 +53,18 @@ public class UserDAOImpl implements UserDAO {
 					user.setUserType(userType);
 					user.setPassword(rs.getBytes(k++));
 					user.setSalt(rs.getBytes(k++));
+					user.setIsBlocked(rs.getBoolean(k++));
 				}
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Can`t get user by login", e);
+			throw new DBException("Can`t get user by login", e);
 		}
 		return user;
 	}
 
 	@Override
-	public List<User> getAllUsers() {
+	public List<User> getAllUsers() throws DBException {
 		List<User> users = new ArrayList<>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement st = con.createStatement();
@@ -73,14 +85,14 @@ public class UserDAOImpl implements UserDAO {
 				users.add(user);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get all users", e);
+			throw new DBException("Can`t get all users", e);
 		}
 		return users;
 	}
 
 	@Override
-	public void updateUser(User user) {
+	public void updateUser(User user) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.UPDATE_USER)) {
 			int k = 1;
@@ -94,13 +106,13 @@ public class UserDAOImpl implements UserDAO {
 			ps.setLong(k++, user.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t update user", e);
+			throw new DBException("Can`t update user", e);
 		}
 	}
 
 	@Override
-	public void addUser(User user) {
+	public void addUser(User user) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.ADD_USER,
 						PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -116,13 +128,13 @@ public class UserDAOImpl implements UserDAO {
 				user.setId(rs.getLong(1));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t create new user", e);
+			throw new DBException("Can`t create new user", e);
 		}
 	}
 
 	@Override
-	public List<UserType> getAllUserTypes() {
+	public List<UserType> getAllUserTypes() throws DBException {
 		List<UserType> userTypes = new ArrayList<UserType>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement st = con.createStatement();
@@ -135,14 +147,14 @@ public class UserDAOImpl implements UserDAO {
 				userTypes.add(userType);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get all user types", e);
+			throw new DBException("Can`t get all user types", e);
 		}
 		return userTypes;
 	}
 
 	@Override
-	public List<User> getAllUsersWithOpenOrders() {
+	public List<User> getAllUsersWithOpenOrders() throws DBException {
 		List<User> users = new ArrayList<User>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement st = con.createStatement();
@@ -157,14 +169,14 @@ public class UserDAOImpl implements UserDAO {
 				users.add(user);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get all user with open orders", e);
+			throw new DBException("Can`t get all user with open orders", e);
 		}
 		return users;
 	}
 
 	@Override
-	public User getUserById(Long userId) {
+	public User getUserById(Long userId) throws DBException {
 		User user = new User();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.GET_USER_BY_ID)) {
@@ -184,8 +196,8 @@ public class UserDAOImpl implements UserDAO {
 				user.setUserType(ut);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get user by id", e);
+			throw new DBException("Can`t get user by id", e);
 		}
 
 		return user;

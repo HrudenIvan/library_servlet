@@ -155,6 +155,11 @@ public enum CommandEnum {
 		{
 			command = new FindBooksByTitleCommand();
 		}
+	},
+	CHANGELOCALE {
+		{
+			command = new ChangeLocaleCommand();
+		}
 	};
 
 	Command command;

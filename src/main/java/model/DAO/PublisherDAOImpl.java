@@ -8,12 +8,21 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import Exception.DBException;
 import model.Constants;
 import model.PooledConnections;
 import model.entity.Publisher;
 
 public class PublisherDAOImpl implements PublisherDAO {
 	private static PublisherDAO instance;
+	private static final Logger logger;
+
+	static {
+		logger = LogManager.getLogger(PublisherDAOImpl.class.getName());
+	}
 
 	private PublisherDAOImpl() {
 	}
@@ -26,7 +35,7 @@ public class PublisherDAOImpl implements PublisherDAO {
 	}
 
 	@Override
-	public Publisher getPublisher(long id) {
+	public Publisher getPublisher(long id) throws DBException {
 		Publisher publisher = new Publisher();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.GET_PUBLISHER_BY_ID)) {
@@ -38,14 +47,14 @@ public class PublisherDAOImpl implements PublisherDAO {
 				publisher.setName(rs.getString(k++));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get publisher", e);
+			throw new DBException("Can`t get publisher", e);
 		}
 		return publisher;
 	}
 
 	@Override
-	public List<Publisher> getAllPublishers() {
+	public List<Publisher> getAllPublishers() throws DBException {
 		List<Publisher> publishers = new ArrayList<Publisher>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				Statement st = con.createStatement();
@@ -58,14 +67,14 @@ public class PublisherDAOImpl implements PublisherDAO {
 				publishers.add(publisher);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t get all publishers", e);
+			throw new DBException("Can`t get all publishers", e);
 		}
 		return publishers;
 	}
 
 	@Override
-	public void addPublisher(Publisher publisher) {
+	public void addPublisher(Publisher publisher) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.ADD_PUBLISHER,
 						PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -77,13 +86,13 @@ public class PublisherDAOImpl implements PublisherDAO {
 				publisher.setId(Long.valueOf(rs.getLong(1)));
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t create new publisher", e);
+			throw new DBException("Can`t create new publisher", e);
 		}
 	}
 
 	@Override
-	public void updatePublisher(Publisher publisher) {
+	public void updatePublisher(Publisher publisher) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
 				PreparedStatement ps = con.prepareStatement(Constants.UPDATE_PUBLISHER)) {
 			int k = 1;
@@ -91,8 +100,8 @@ public class PublisherDAOImpl implements PublisherDAO {
 			ps.setLong(k++, publisher.getId());
 			ps.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Can`t update publisher", e);
+			throw new DBException("Can`t update publisher", e);
 		}
 	}
 

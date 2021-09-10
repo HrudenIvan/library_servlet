@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.AuthorDAO;
 import model.DAO.AuthorDAOImpl;
 import model.entity.Author;
@@ -16,14 +17,14 @@ public class UpdateAuthorCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		Author author = new Author();
 		author.setId(Long.valueOf(request.getParameter("aId")));
 		author.setFirstName(request.getParameter("firstName"));
 		author.setLastName(request.getParameter("lastName"));
 		
 		HashMap<String, String> errors = new HashMap<String, String>();
-		if (!Validator.validateAuthor(author, errors)) {
+		if (!Validator.validateAuthor(request, author, errors)) {
 			request.setAttribute("author", author);
 			request.setAttribute("errors", errors);
 			

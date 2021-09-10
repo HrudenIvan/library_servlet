@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.OrderDAO;
 import model.DAO.OrderDAOImpl;
 import model.DAO.UserDAO;
@@ -18,7 +19,7 @@ public class PrepareCabinetCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		UserDAO userDAO = UserDAOImpl.getInstance();
 		Long userId = (Long) request.getSession().getAttribute("currentUserId");
 		User currentUser = userDAO.getUserById(userId);

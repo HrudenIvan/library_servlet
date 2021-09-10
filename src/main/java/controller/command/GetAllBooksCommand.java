@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import Exception.DBException;
 import model.DAO.BookDAO;
 import model.DAO.BookDAOImpl;
 import model.entity.Book;
@@ -18,7 +19,7 @@ public class GetAllBooksCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException, DBException {
 		String sortOrder = request.getParameter("sortOrder");
 		request.setAttribute("sortOrder", sortOrder);
 		Comparator<Book> comparator = BookComporators.defineComparator(sortOrder);

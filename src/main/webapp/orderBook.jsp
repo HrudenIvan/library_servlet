@@ -1,28 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>	
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="orderBook"/>	
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Book order</title>
+<title><fmt:message key="title"/></title>
 </head>
 <body>
 	${navigation}
 	<hr>
-	<h1>Book order</h1>
+	<h1><fmt:message key="header"/></h1>
 	<form action="main?action=addBookOrder" method="post">
 		<input type="hidden" name="bId" value="${book.id}">
 		<input type="hidden" name="uId" value="${currentUserId}">
-		Book: <input type="text" value="${book.title}" readonly><br>
-		Author: <input type="text" value="${book.author.firstName} ${book.author.lastName}" readonly><br>
-		Order type: <select name="otId">
+		<fmt:message key="title"/> <input type="text" value="${book.title}" readonly><br>
+		<fmt:message key="author"/> <input type="text" value="${book.author.firstName} ${book.author.lastName}" readonly><br>
+		<fmt:message key="orderType"/> <select name="otId">
 			<c:forEach var="orderType" items="${orderTypes}">
 				<option value="${orderType.id}">${orderType.type}</option>
 			</c:forEach>
 		</select><br>
-		Release date: <input type="text" value="${book.releaseDate}" readonly><br><br>
-		<input type="submit" value="Order">
+		<fmt:message key="releaseDate"/> <input type="text" value="${book.releaseDate}" readonly><br><br>
+		<input type="submit" value="<fmt:message key="button"/>">
 	</form>
 </body>
 </html>

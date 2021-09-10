@@ -1,19 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="addPublisher"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Add publisher</title>
+<title><fmt:message key="title"/></title>
 </head>
 <body>
 	${navigation}
 	<hr>
-	<h1>Add publisher</h1>
+	<h1><fmt:message key="header"/></h1>
 	<form action="main?action=addPublisher" method="post">
-		Name: <input type="text" name="name" value="${publisher.name}">
+		<fmt:message key="name"/> <input type="text" name="name" value="${publisher.name}">
 		<label style="color:red">${errors.name}</label><br><br>
-		<input type="submit" value="Submit">
+		<input type="submit" value="<fmt:message key="button"/>">
 	</form>
 </body>
 </html>
