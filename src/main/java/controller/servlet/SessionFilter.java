@@ -12,8 +12,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import controller.util.GuestNavigation;
-
 import util.Util;
 
 @WebFilter("/*")
@@ -27,8 +25,9 @@ public class SessionFilter implements Filter {
 		if (session.getAttribute("currentUserId") == null) {
 			session.setAttribute("currentUserId", 0);
 			session.setAttribute("currentUserType", "guest");
+			session.setAttribute("bookEditVis", "none");
+			session.setAttribute("bookOrderVis", "none");
 			session.setAttribute("isBlocked", Boolean.FALSE);
-			session.setAttribute("navigation", GuestNavigation.getInstance());
 			Locale locale = Util.defineLocale(req);
 			session.setAttribute("locale", locale);
 		}

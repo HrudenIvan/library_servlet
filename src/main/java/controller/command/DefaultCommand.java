@@ -15,7 +15,7 @@ public class DefaultCommand implements Command {
 		String currentUserType = (String) session.getAttribute("currentUserType");
 		String page = "main?action=getAllBooks";
 		if ("admin".equals(currentUserType)) {
-			page = "admin.jsp";
+			page = "main?action=prepareAdmin";
 		}
 		if ("librarian".equals(currentUserType)) {
 			page = "main?action=prepareLibrarian";

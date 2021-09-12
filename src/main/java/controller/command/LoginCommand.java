@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Exception.DBException;
-import controller.util.UserNavigation;
-import controller.util.AdminNavigation;
-import controller.util.LibrarianNavigation;
 
 import model.DAO.UserDAO;
 import model.DAO.UserDAOImpl;
@@ -41,13 +38,12 @@ public class LoginCommand implements Command {
 		
 		HttpSession session = request.getSession();
 		if ("admin".equals(user.getUserType().getType())) {
-			session.setAttribute("navigation", AdminNavigation.getInstance());
-		}
-		if ("librarian".equals(user.getUserType().getType())) {
-			session.setAttribute("navigation", LibrarianNavigation.getInstance());
+			session.setAttribute("bookEditVis", "inline table");
+			session.setAttribute("bookOrderVis", "none");
 		}
 		if ("user".equals(user.getUserType().getType())) {
-			session.setAttribute("navigation", UserNavigation.getInstance());
+			session.setAttribute("bookEditVis", "none");
+			session.setAttribute("bookOrderVis", "inline table");
 		}
 		
 		session.setAttribute("isBlocked", user.getIsBlocked());

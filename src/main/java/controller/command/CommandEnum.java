@@ -160,6 +160,11 @@ public enum CommandEnum {
 		{
 			command = new ChangeLocaleCommand();
 		}
+	},
+	PREPAREADMIN {
+		{
+			command = new PrepareAdminCommand();
+		}
 	};
 
 	Command command;

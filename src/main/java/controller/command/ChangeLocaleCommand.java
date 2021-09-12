@@ -19,7 +19,7 @@ public class ChangeLocaleCommand implements Command {
 		String language = request.getParameter("language");
 		String country = request.getParameter("country");
 		Locale locale = new Locale(language, country);
-		System.out.println(locale);
+
 		HttpSession session = request.getSession();
 		session.setAttribute("locale", locale);
 		

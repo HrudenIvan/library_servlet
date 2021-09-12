@@ -1,66 +1,78 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="${locale}"/>
-<fmt:setBundle basename="login"/>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<fmt:setLocale value="${locale}" />
+<fmt:setBundle basename="login" />
 
 <!DOCTYPE html>
 <html>
 <head>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU"
+	crossorigin="anonymous">
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+	integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+	crossorigin="anonymous"></script>
 <style>
-input, select {
-	width: 300px;
-	padding: 12px 20px;
-	margin: 8px 0;
-	display: inline-block;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	box-sizing: border-box;
-}
-
-input[type=submit] {
-	width: 100%;
-	background-color: #4CAF50;
-	color: white;
-	padding: 14px 20px;
-	margin: 8px 0;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-}
-
-input[type=submit]:hover {
-	background-color: #45a049;
-}
-
-div {
-	width: 375px;
-	border-radius: 5px;
-	background-color: #f2f2f2;
-	padding: 20px;
-}
 </style>
 <meta charset="UTF-8">
-<title><fmt:message key="login.title"/></title>
+<title><fmt:message key="login.title" /></title>
 </head>
 <body>
-	${navigation}
-	<hr>
-	<h1><fmt:message key="login.header"/></h1>
-	<div>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="main?action=default"><fmt:message
+					key="nav.lib" /></a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+				aria-controls="navbarNavAltMarkup" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-link active" href="login.jsp"><fmt:message
+							key="nav.login" /></a> <a class="nav-link" href="main?action=default"><fmt:message
+							key="nav.home" /></a> <a class="nav-link" href="register.jsp"><fmt:message
+							key="nav.register" /></a>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="navbar-nav">
+				<a class="nav-link"
+					href="main?action=changeLocale&language=ru&country=RU">RU</a> <a
+					class="nav-link"
+					href="main?action=changeLocale&language=en&country=US">Eng</a>
+			</div>
+		</div>
+	</nav>
+	<br>
+	<br>
+	<div style="margin: 20px;">
+		<h1>
+			<fmt:message key="login.header" />
+		</h1>
+		<br>
 		<form action="main?action=login" method="post">
 			<table>
 				<tr>
-					<td><fmt:message key="login.form.login"/></td>
-					<td><input type="text" name="login" value="${login}"></td>
+					<td><fmt:message key="login.form.login" /></td>
+					<td><input class="form-control" type="text" name="login"
+						value="${login}"></td>
 				</tr>
 				<tr>
-					<td><fmt:message key="login.form.password"/></td>
-					<td><input type="password" name="password"></td>
+					<td><fmt:message key="login.form.password" /></td>
+					<td><input class="form-control" type="password"
+						name="password"></td>
 				</tr>
 			</table>
-			<label style="color: red">${errorLoginMessage}</label><br> <input
-				type="submit" value="<fmt:message key="login.form.button"/>">
+			<label style="color: red">${errorLoginMessage}</label><br>
+			<br> <input class="btn btn-outline-secondary" type="submit"
+				value="<fmt:message key="login.form.button"/>">
 		</form>
 	</div>
 </body>

@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import controller.util.GuestNavigation;
-
 import util.Util;
 
 public class LogoutCommand implements Command {
@@ -23,8 +21,9 @@ public class LogoutCommand implements Command {
 		session = request.getSession(true);
 		session.setAttribute("isBlocked", Boolean.FALSE);
 		session.setAttribute("currentUserId", 0);
+		session.setAttribute("bookEditVis", "none");
+		session.setAttribute("bookOrderVis", "none");
 		session.setAttribute("currentUserType", "guest");
-		session.setAttribute("navigation", GuestNavigation.getInstance());
 		Locale locale = Util.defineLocale(request);
 		session.setAttribute("locale", locale);
 		
