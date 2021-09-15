@@ -104,7 +104,7 @@
 						selected
 					</c:if>>${orderStatus.status}</option>
 							</c:forEach>
-					</select> <label style="color: red">${errors.orderStatus}</label></td>
+					</select></td><td> <label style="color: red">${errors.orderStatus}</label></td>
 				</tr>
 			</table>
 			<br>

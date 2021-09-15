@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:setLocale value="${locale}" />
-<fmt:setBundle basename="error" />
+<fmt:setBundle basename="page404" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,14 +20,11 @@
 </head>
 <body>
 	<div style="margin: 20px;">
-		<a class="nav-link" href="main?action=default"><fmt:message key="back"/></a>
+		<a class="nav-link" href="${pageContext.request.contextPath}/main?action=default"><fmt:message key="back"/></a>
 		<h1><fmt:message key="head"/></h1>
 		<br>
 		<br>
 		<h3><fmt:message key="head3"/></h3>
-		<br>
-		<br>
-		<p>${errorMessage }</p>
 	</div>
 </body>
 </html>

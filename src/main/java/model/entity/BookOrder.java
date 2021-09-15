@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class BookOrder {
-	private final double penaltyDaylyAmount = 1.5;
+	private static final double penaltyDaylyAmount=1.5;
 	private long userId;
-	private long bookId; 
+	private long bookId;
 	private LocalDateTime orderDate;
 	private String bookTitle;
 	private String orderType;
@@ -24,7 +24,7 @@ public class BookOrder {
 		this.orderDate = orderDate;
 	}
 
-		public OrderStatus getOrderStatus() {
+	public OrderStatus getOrderStatus() {
 		return orderStatus;
 	}
 

@@ -63,7 +63,11 @@ public class Validator {
 
 		if (bookOrder.getOrderStatus().getId() - oldOsId < 0) {
 			result = false;
-			errors.put("orderStatus", Localizer.getString(request, "validation.orderstatus.order"));
+			errors.put("orderStatus", Localizer.getString(request, "validation.orderstatus.orderBack"));
+			bookOrder.getOrderStatus().setId(oldOsId);
+		} else if (bookOrder.getOrderStatus().getId() - oldOsId > 1) {
+			result = false;
+			errors.put("orderStatus", Localizer.getString(request, "validation.orderstatus.orderForward"));
 			bookOrder.getOrderStatus().setId(oldOsId);
 		}
 

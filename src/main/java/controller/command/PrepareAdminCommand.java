@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import Exception.DBException;
 
@@ -18,7 +19,8 @@ public class PrepareAdminCommand implements Command {
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {
 		UserDAO userDAO = UserDAOImpl.getInstance();
-		Long userId = (Long) request.getSession().getAttribute("currentUserId");
+		HttpSession session = request.getSession();
+		Long userId = (Long) session.getAttribute("currentUserId");
 		User currentUser = userDAO.getUserById(userId);
 		request.setAttribute("currentUser", currentUser);
 

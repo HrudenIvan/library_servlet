@@ -55,7 +55,7 @@
 	</nav>
 	<br>
 	<br>
-	<div style="margin: 20px; width: 20%;">
+	<div style="margin: 20px; width: 30%;">
 		<h1>
 			<fmt:message key="header" />
 		</h1>

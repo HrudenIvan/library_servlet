@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import Exception.DBException;
 import model.DAO.OrderDAO;
@@ -28,7 +29,8 @@ public class PrepareLibrarianCommand implements Command {
 		List<User> users = userDAO.getAllUsersWithOpenOrders();
 		request.setAttribute("users", users);
 
-		Long currentUserId = (Long) request.getSession().getAttribute("currentUserId");
+		HttpSession session = request.getSession();
+		Long currentUserId = (Long) session.getAttribute("currentUserId");
 		User currentUser = userDAO.getUserById(currentUserId);
 		request.setAttribute("currentUser", currentUser);
 
