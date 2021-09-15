@@ -6,13 +6,14 @@ import Exception.DBException;
 import model.entity.Book;
 
 public interface BookDAO {
-	List<Book> getAllBooks() throws DBException;
+	List<Book> getAllBooks(int page,int BOOKS_PER_PAGE, String sort, String order, String title, String aLastname, String aFirstname) throws DBException;
 
 	Book getBook(long id) throws DBException;
 
 	void updateBook(Book book) throws DBException;
 
 	void addBook(Book book) throws DBException;
+	
+	int booksCount(String sort, String order, String title, String aLastname, String aFirstname) throws DBException;
 
-	List<Book> findBooksByTitle(String title) throws DBException;
 }

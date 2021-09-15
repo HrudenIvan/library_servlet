@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import Exception.DBException;
+
 import model.Constants;
 import model.PooledConnections;
 import model.entity.Author;
@@ -34,29 +35,41 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public List<Book> getAllBooks() throws DBException {
+	public List<Book> getAllBooks(int page,int BOOKS_PER_PAGE, String sort, String order, String title, String aLastname, String aFirstname)
+			throws DBException {
+		String query = "SELECT b.id AS bid, b.title, b.available, b.total, a.id AS aid, a.first_name, a.last_name, p.id AS pid, p.name, b.release_date "
+				+ "FROM book b " + "INNER JOIN author a ON b.author_id = a.id "
+				+ "INNER JOIN publisher p ON b.publisher_id = p.id "
+				+ "WHERE b.available >0 AND b.title LIKE( ? ) AND a.first_name LIKE( ? ) AND a.last_name LIKE( ? ) "
+				+ "ORDER BY ";
+		query += sort + " " + order + " " + "LIMIT " + BOOKS_PER_PAGE + " " + " OFFSET " + page * BOOKS_PER_PAGE;
 		List<Book> books = new ArrayList<Book>();
 		try (Connection con = PooledConnections.getInstance().getConnection();
-				Statement statement = con.createStatement();
-				ResultSet rs = statement.executeQuery(Constants.GET_ALL_BOOKS)) {
-			while (rs.next()) {
-				Book book = new Book();
-				int k = 1;
-				book.setId(rs.getLong(k++));
-				book.setTitle(rs.getString(k++));
-				book.setAvailable(rs.getInt(k++));
-				book.setQuantity(rs.getInt(k++));
-				Author author = new Author();
-				author.setId(rs.getLong(k++));
-				author.setFirstName(rs.getString(k++));
-				author.setLastName(rs.getString(k++));
-				book.setAuthor(author);
-				Publisher publisher = new Publisher();
-				publisher.setId(rs.getLong(k++));
-				publisher.setName(rs.getString(k++));
-				book.setPublisher(publisher);
-				book.setReleaseDate(rs.getInt(k++));
-				books.add(book);
+				PreparedStatement ps = con.prepareStatement(query)) {
+			int j = 1;
+			ps.setString(j++, "%" + title + "%");
+			ps.setString(j++, "%" + aFirstname + "%");
+			ps.setString(j++, "%" + aLastname + "%");
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					Book book = new Book();
+					int k = 1;
+					book.setId(rs.getLong(k++));
+					book.setTitle(rs.getString(k++));
+					book.setAvailable(rs.getInt(k++));
+					book.setQuantity(rs.getInt(k++));
+					Author author = new Author();
+					author.setId(rs.getLong(k++));
+					author.setFirstName(rs.getString(k++));
+					author.setLastName(rs.getString(k++));
+					book.setAuthor(author);
+					Publisher publisher = new Publisher();
+					publisher.setId(rs.getLong(k++));
+					publisher.setName(rs.getString(k++));
+					book.setPublisher(publisher);
+					book.setReleaseDate(rs.getInt(k++));
+					books.add(book);
+				}
 			}
 		} catch (SQLException e) {
 			logger.error("Can`t get all books", e);
@@ -142,37 +155,32 @@ public class BookDAOImpl implements BookDAO {
 	}
 
 	@Override
-	public List<Book> findBooksByTitle(String title) throws DBException {
-		List<Book> books = new ArrayList<Book>();
+	public int booksCount(String sort, String order, String title, String aLastname, String aFirstname)
+			throws DBException {
+		int result = 10;
+		String query = 
+				  "SELECT COUNT(*) AS count "
+				+ "FROM book b "
+				+ "INNER JOIN author a ON b.author_id = a.id "
+				+ "INNER JOIN publisher p ON b.publisher_id = p.id "
+				+ "WHERE b.available >0 AND b.title LIKE( ? ) AND a.first_name LIKE( ? ) AND a.last_name LIKE( ? ) "
+				+ "ORDER BY ";
 		try (Connection con = PooledConnections.getInstance().getConnection();
-				PreparedStatement ps = con.prepareStatement(Constants.GET_BOOKS_BY_TITLE)) {
-			ps.setString(1, "%" + title + "%");
+				PreparedStatement ps = con.prepareStatement(query + sort + " " + order)) {
+			int k = 1;
+			ps.setString(k++, "%" + title + "%");
+			ps.setString(k++, "%" + aFirstname + "%");
+			ps.setString(k++, "%" + aLastname + "%"); 
 			try (ResultSet rs = ps.executeQuery()) {
-				while (rs.next()) {
-					Book book = new Book();
-					int k = 1;
-					book.setId(rs.getLong(k++));
-					book.setTitle(rs.getString(k++));
-					book.setAvailable(rs.getInt(k++));
-					book.setQuantity(rs.getInt(k++));
-					Author author = new Author();
-					author.setId(rs.getLong(k++));
-					author.setFirstName(rs.getString(k++));
-					author.setLastName(rs.getString(k++));
-					book.setAuthor(author);
-					Publisher publisher = new Publisher();
-					publisher.setId(rs.getLong(k++));
-					publisher.setName(rs.getString(k++));
-					book.setPublisher(publisher);
-					book.setReleaseDate(rs.getInt(k++));
-					books.add(book);
+				if (rs.next()) {
+					result = rs.getInt("count");
 				}
 			}
 		} catch (SQLException e) {
-			logger.error("Can`t finde book by title", e);
-			throw new DBException("Can`t finde book by title", e);
+			logger.error("Can`t get books count", e);
+			throw new DBException("Can`t get books count", e);
 		}
-		return books;
+		return result;
 	}
 
 }

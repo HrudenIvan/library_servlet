@@ -1,5 +1,6 @@
 package controller.command;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,9 +15,10 @@ import org.mockito.Mockito;
 
 import dao.BookDAOMock;
 import model.DAO.BookDAOImpl;
+import util.Localizer;
 
 public class GetAllBooksCommandTest {
-	
+
 	@Test
 	public void ExecuteShouldForwardToBooksPage() throws Exception {
 		HttpServletRequest req = mock(HttpServletRequest.class);
@@ -25,10 +27,13 @@ public class GetAllBooksCommandTest {
 		when(req.getRequestDispatcher("books.jsp")).thenReturn(reqDisp);
 		try (MockedStatic<BookDAOImpl> bookDAOMock = Mockito.mockStatic(BookDAOImpl.class)) {
 			bookDAOMock.when(() -> BookDAOImpl.getInstance()).thenReturn(new BookDAOMock());
-			Command com = CommandFactory.getCommand("getAllBooks");
-			com.execute(req, resp);
-			
-			verify(reqDisp).forward(req, resp);
+			try (MockedStatic<Localizer> util = Mockito.mockStatic(Localizer.class)) {
+				util.when(() -> Localizer.getString(any(), any())).thenReturn("error");
+				Command com = CommandFactory.getCommand("getAllBooks");
+				com.execute(req, resp);
+
+				verify(reqDisp).forward(req, resp);
+			}
 		}
 	}
 

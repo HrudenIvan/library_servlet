@@ -151,11 +151,6 @@ public enum CommandEnum {
 			command = new SubscriptionCommand();
 		}
 	},
-	FINDBOOKSBYTITLE {
-		{
-			command = new FindBooksByTitleCommand();
-		}
-	},
 	CHANGELOCALE {
 		{
 			command = new ChangeLocaleCommand();

@@ -94,28 +94,39 @@
 		<h1>
 			<fmt:message key="books.header" />
 		</h1>
-		<br>
-		<form action="main" method="get">
-			<input type="hidden" name="action" value="getAllBooks">
-			<fmt:message key="books.form.sort.sortOder" />
-			<select name="sortOrder">
-				<c:forEach var="comparator" items="${comparators}">
-					<option value="${comparator.name}"
-						<c:set var="cn" value="${comparator.name}"/>
-						<c:if test="${cn eq sortOrder}">
-						selected
-					</c:if>>${comparator.title}</option>
-				</c:forEach>
-			</select> <input type="submit"
-				value="<fmt:message key="books.form.sort.button"/>">
-		</form>
-		<form action="main" method="get">
-			<input type="hidden" name="action" value="findBooksByTitle">
-			<fmt:message key="books.form.find.findeByTitle" />
-			<input type="text" name="title" value="${title}"> <input
-				type="submit" value="<fmt:message key="books.form.find.button"/>">
-		</form>
-		<br>
+		<br><br>
+			<form action="main" method="get">
+				<input type="hidden" name="action" value="getAllBooks">
+				<fmt:message key="books.form.sort.sortBy"/>
+				<select name="sort">
+					<c:forEach var="sortByItem" items="${sortBy}">
+						<option value="${sortByItem.value}"
+							<c:set var="cn" value="${sortByItem.value}"/>
+							<c:if test="${cn eq sort}">
+							selected
+						</c:if>>${sortByItem.title}</option>
+					</c:forEach>
+				</select>
+				<fmt:message key="books.form.sort.orderBy"/>
+				<select name="order">
+					<c:forEach var="orderByItem" items="${orderBy}">
+						<option value="${orderByItem.value}"
+							<c:set var="cn" value="${orderByItem.value}"/>
+							<c:if test="${cn eq order}">
+							selected
+						</c:if>>${orderByItem.title}</option>
+					</c:forEach>
+				</select>
+				<input class="btn btn-outline-secondary" type="submit" value="<fmt:message key="books.form.sort.button"/>"><br>
+				<fmt:message key="books.form.find.findeByTitle"/>
+				<input type="text" name="title" value="${title}">
+				<fmt:message key="books.form.main.aLastName"/>
+				<input type="text" name="aLastname" value="${aLastname}">
+				<fmt:message key="books.form.main.aFirstName"/>
+				<input type="text" name="aFirstname" value="${aFirstname}">
+				<input class="btn btn-outline-secondary" type="submit" value="<fmt:message key="books.form.find.button"/>">
+			</form>
+		<br><br>
 		<table class="table table-striped">
 			<tr>
 				<th><fmt:message key="books.form.main.title" /></th>
@@ -144,6 +155,9 @@
 				</tr>
 			</c:forEach>
 		</table>
+		<p>
+		${paginationNav}
+		</p>
 	</div>
 </body>
 </html>

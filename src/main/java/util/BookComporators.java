@@ -1,201 +1,67 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import model.entity.Book;
+import javax.servlet.http.HttpServletRequest;
 
 public class BookComporators {
 
 	private BookComporators() {
 	}
 
-	public static List<BookComporators.Comparators> getAll(){
-		List<BookComporators.Comparators> comparators = new ArrayList<>();
-		for (BookComporators.Comparators comp : BookComporators.Comparators.values()) {
-			comparators.add(comp);
-		}
-		
-		return comparators;
-	}
-	
-	public static Comparator<Book> defineComparator(String sortOrder) {
-		if (sortOrder == null) {
-			return Comparators.YEARDESC.getComparator();
-		}
-		Comparator<Book> comparator = null;
-		Comparators comp = null;
-		try {
-			comp = Comparators.valueOf(sortOrder.toUpperCase());
-			comparator = comp.getComparator();
-		} catch (IllegalArgumentException e) {
-			comparator = Comparators.YEARASC.getComparator();
-		}
-		return comparator;
-	}
-
-	public static class YearAsc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book1.getReleaseDate() - book2.getReleaseDate() != 0) {
-				result = book1.getReleaseDate() - book2.getReleaseDate();
-			} else {
-				result = book1.getTitle().compareTo(book2.getTitle());
-			}
-			return result;
-		}
-
-	}
-
-	public static class TitleAsc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book1.getTitle().compareTo(book2.getTitle()) != 0) {
-				result = book1.getTitle().compareTo(book2.getTitle());
-			} else if (book1.getAuthor().getLastName().compareTo(book2.getAuthor().getLastName()) != 0) {
-				result = book1.getAuthor().getLastName().compareTo(book2.getAuthor().getLastName());
-			} else {
-				result = book1.getAuthor().getFirstName().compareTo(book2.getAuthor().getFirstName());
-			}
-			return result;
-		}
-
-	}
-
-	public static class TitleDesc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book2.getTitle().compareTo(book1.getTitle()) != 0) {
-				result = book2.getTitle().compareTo(book1.getTitle());
-			} else if (book1.getAuthor().getLastName().compareTo(book2.getAuthor().getLastName()) != 0) {
-				result = book1.getAuthor().getLastName().compareTo(book2.getAuthor().getLastName());
-			} else {
-				result = book1.getAuthor().getFirstName().compareTo(book2.getAuthor().getFirstName());
-			}
-			return result;
-		}
-
-	}
-
-	public static class YearDesc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book2.getReleaseDate() - book1.getReleaseDate() != 0) {
-				result = book2.getReleaseDate() - book1.getReleaseDate();
-			} else {
-				result = book1.getTitle().compareTo(book2.getTitle());
-			}
-			return result;
-		}
-
-	}
-
-	public static class AuthorAsc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book1.getAuthor().getLastName().compareTo(book2.getAuthor().getLastName()) != 0) {
-				result = book1.getAuthor().getLastName().compareTo(book2.getAuthor().getLastName());
-			} else if (book1.getAuthor().getFirstName().compareTo(book2.getAuthor().getFirstName()) != 0) {
-				result = book1.getAuthor().getFirstName().compareTo(book2.getAuthor().getFirstName());
-			} else {
-				result = book1.getTitle().compareTo(book2.getTitle());
-			}
-			return result;
-		}
-	}
-	
-	public static class AuthorDesc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book2.getAuthor().getLastName().compareTo(book1.getAuthor().getLastName()) != 0) {
-				result = book2.getAuthor().getLastName().compareTo(book1.getAuthor().getLastName());
-			} else if (book2.getAuthor().getFirstName().compareTo(book1.getAuthor().getFirstName()) != 0) {
-				result = book2.getAuthor().getFirstName().compareTo(book1.getAuthor().getFirstName());
-			} else {
-				result = book1.getTitle().compareTo(book2.getTitle());
-			}
-			return result;
-		}
-	}
-	
-	public static class PublisherAsc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book1.getPublisher().getName().compareTo(book2.getPublisher().getName()) != 0) {
-				result = book1.getPublisher().getName().compareTo(book2.getPublisher().getName());
-			} else if (book2.getReleaseDate() - book1.getReleaseDate() != 0) {
-				result = book2.getReleaseDate() - book1.getReleaseDate();
-			} else {
-				result = book1.getTitle().compareTo(book2.getTitle());
-			}
-			return result;
-		}
-		
-	}
-	
-	public static class PublisherDesc implements Comparator<Book> {
-
-		@Override
-		public int compare(Book book1, Book book2) {
-			int result = 0;
-			if (book2.getPublisher().getName().compareTo(book1.getPublisher().getName()) != 0) {
-				result = book2.getPublisher().getName().compareTo(book1.getPublisher().getName());
-			} else if (book2.getReleaseDate() - book1.getReleaseDate() != 0) {
-				result = book2.getReleaseDate() - book1.getReleaseDate();
-			} else {
-				result = book1.getTitle().compareTo(book2.getTitle());
-			}
-			return result;
-		}
-		
-	}
-
-	public enum Comparators {
-		YEARASC("Release year asc", "yearAsc", new YearAsc()),
-		YEARDESC("Release year desc", "yearDesc", new YearDesc()),
-		TITLEASC("Title asc", "titleAsc", new TitleAsc()),
-		TITLEDESC("Title desc", "titleDesc", new TitleDesc()),
-		AUTHORASC("Athor asc", "authorAsc", new AuthorAsc()),
-		AUTHORDESC("Athor desc", "athorDesc", new AuthorDesc()),
-		PUBLISHERASC("Publisher asc", "publisherAsc", new PublisherAsc()),
-		PUBLISHERDESC("Publisher desc", "publisherDesc", new PublisherDesc());
-
+	public static class SortBy {
 		private String title;
-		private String name;
-		private Comparator<Book> comparator;
-
-		private Comparators(String title, String name, Comparator<Book> comparator) {
+		private String value;
+		
+		public SortBy(String title, String value) {
 			this.title = title;
-			this.name = name;
-			this.comparator = comparator;
-		}
-
-		public String getName() {
-			return name;
+			this.value = value;
 		}
 
 		public String getTitle() {
 			return title;
 		}
 
-		Comparator<Book> getComparator() {
-			return comparator;
+		public String getValue() {
+			return value;
 		}
-	}
 
+	}
+	
+	public static class OrderBy {
+		private String title;
+		private String value;
+		
+		public OrderBy(String title, String value) {
+			this.title = title;
+			this.value = value;
+		}
+
+		public String getTitle() {
+			return title;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+	}
+	
+	public static List<SortBy> getAllSortBy(HttpServletRequest request) {
+		List<SortBy> result = new ArrayList<BookComporators.SortBy>();
+		result.add(new SortBy(Localizer.getString(request, "title"),"b.title"));
+		result.add(new SortBy(Localizer.getString(request, "authorLastname"),"a.last_name"));
+		result.add(new SortBy(Localizer.getString(request, "publisher"),"p.name"));
+		result.add(new SortBy(Localizer.getString(request, "releaseDate"),"b.release_date"));
+		return result;
+	}
+	
+	public static List<OrderBy> getAllOrderBy(HttpServletRequest request) {
+		List<OrderBy> result = new ArrayList<BookComporators.OrderBy>();
+		result.add(new OrderBy(Localizer.getString(request, "ascending"),"asc"));
+		result.add(new OrderBy(Localizer.getString(request, "descending"),"desc"));
+		return result;
+	}
+		
 }

@@ -2,9 +2,9 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import Exception.DBException;
+
 import model.DAO.BookDAO;
 import model.entity.Author;
 import model.entity.Book;
@@ -50,7 +50,7 @@ public class BookDAOMock implements BookDAO{
 	}
 
 	@Override
-	public List<Book> getAllBooks() throws DBException {
+	public List<Book> getAllBooks(int page,int BOOKS_PER_PAGE, String sort, String order, String title, String aLastname, String aFirstname) throws DBException {
 		return list;
 	}
 
@@ -78,8 +78,9 @@ public class BookDAOMock implements BookDAO{
 	}
 
 	@Override
-	public List<Book> findBooksByTitle(String title) throws DBException {
-		// TODO Auto-generated method stub
-		return list.stream().filter(e -> e.getTitle().equals(title)).collect(Collectors.toList());
+	public int booksCount(String sort, String order, String title, String aLastname, String aFirstname)
+			throws DBException {
+		return list.size();
 	}
+
 }
