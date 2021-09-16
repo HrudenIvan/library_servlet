@@ -55,6 +55,7 @@
 		<h1>
 			<fmt:message key="header" />
 		</h1>
+		<br><br>
 		<form action="main?action=addBookOrder" method="post">
 			<input type="hidden" name="bId" value="${book.id}"> <input
 				type="hidden" name="uId" value="${currentUserId}">

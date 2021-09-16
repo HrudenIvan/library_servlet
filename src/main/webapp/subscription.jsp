@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="ctg" uri="customtags"%>
 <fmt:setLocale value="${locale}" />
 <fmt:setBundle basename="subscription" />
 <!DOCTYPE html>
@@ -69,11 +70,11 @@
 			</tr>
 			<c:forEach var="bookOrder" items="${bookOrders}">
 				<tr>
-					<td><c:out value="${bookOrder.orderDate}" /></td>
+					<td><ctg:format value="${bookOrder.orderDate}"/></td>
 					<td><c:out value="${bookOrder.bookTitle}" /></td>
 					<td><c:out value="${bookOrder.orderType}" /></td>
-					<td><c:out value="${bookOrder.openDate}" /></td>
-					<td><c:out value="${bookOrder.closeDate}" /></td>
+					<td><ctg:format value="${bookOrder.openDate}"/></td>
+					<td><ctg:format value="${bookOrder.closeDate}"/></td>
 					<td><c:out value="${bookOrder.orderStatus.status}" /></td>
 					<td><fmt:formatNumber value="${bookOrder.penalty}"
 							type="currency" /></td>

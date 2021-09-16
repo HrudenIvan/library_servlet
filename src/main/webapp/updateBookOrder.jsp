@@ -5,7 +5,7 @@
 <fmt:setLocale value="${locale}" />
 <fmt:setBundle basename="updateBookOrder" />
 <!DOCTYPE html>
-<html>
+<html lang="${locale.language}">
 <head>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"

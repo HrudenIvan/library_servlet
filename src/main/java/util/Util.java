@@ -79,6 +79,9 @@ public class Util {
 
 	public static String buildPaginationNav(int page, int pagesCount, String title, String aLastname,
 			String aFirstname) {
+		if (pagesCount == 1) {
+			return "";
+		}
 		StringBuilder path = new StringBuilder();
 		path.append("main?action=getAllBooks")
 			.append("&title=")
