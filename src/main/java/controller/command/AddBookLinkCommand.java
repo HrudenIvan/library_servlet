@@ -13,9 +13,21 @@ import model.DAO.PublisherDAO;
 import model.DAO.PublisherDAOImpl;
 import model.entity.Author;
 import model.entity.Publisher;
+import model.entity.Book;
 
+/**
+ * Command to access {@link Book} adding page
+ */
 public class AddBookLinkCommand implements Command {
 
+	/**
+	 * Adds lists of {@link Publisher} and {@link Author} to request. Forwards to {@link Book} adding page
+	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DBException {
 		PublisherDAO pubDAO = PublisherDAOImpl.getInstance();

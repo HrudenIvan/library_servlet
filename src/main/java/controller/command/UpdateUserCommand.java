@@ -15,8 +15,20 @@ import model.entity.UserType;
 import util.Password;
 import util.Validator;
 
+/**
+ * Command for updating {@link User}
+ */
 public class UpdateUserCommand implements Command {
 
+	/**
+	 * Method for handling {@link User} updating. If updated user is not valid, then forwards to update user page with error messages,
+	 * otherwise redirects to all users page 
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

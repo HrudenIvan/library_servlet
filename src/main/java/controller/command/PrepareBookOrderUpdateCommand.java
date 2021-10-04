@@ -14,8 +14,19 @@ import model.DAO.OrderDAOImpl;
 import model.entity.BookOrder;
 import model.entity.OrderStatus;
 
+/**
+ * Command to access {@link BookOrder} update page
+ */
 public class PrepareBookOrderUpdateCommand implements Command {
 
+	/**
+	 * Stores {@link BookOrder}, list of {@link OrderStatus}es in request and forwards to update book order page
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

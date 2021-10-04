@@ -12,8 +12,19 @@ import model.DAO.UserDAO;
 import model.DAO.UserDAOImpl;
 import model.entity.User;
 
+/**
+ * Command to access all {@link User}s page
+ */
 public class GetAllUsersCommand implements Command {
 
+	/**
+	 * Adds list of {@link User}s to request and forwards to all users page
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

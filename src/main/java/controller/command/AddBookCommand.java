@@ -20,8 +20,20 @@ import model.entity.Publisher;
 
 import util.Validator;
 
+/**
+ * Command for adding {@link Book}
+ */
 public class AddBookCommand implements Command {
 
+	/**
+	 * Method for handling {@link Book} adding. If new book not valid, then forwards to add book page with error messages,
+	 * otherwise redirects to all books page 
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException, DBException {

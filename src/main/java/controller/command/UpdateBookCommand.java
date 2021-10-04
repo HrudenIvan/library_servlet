@@ -19,8 +19,20 @@ import model.entity.Book;
 import model.entity.Publisher;
 import util.Validator;
 
+/**
+ * Command for updating {@link Book}
+ */
 public class UpdateBookCommand implements Command {
 
+	/**
+	 * Method for handling {@link Book} updating. If updated book not valid, then forwards to update book page with error messages,
+	 * otherwise redirects to all books page 
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

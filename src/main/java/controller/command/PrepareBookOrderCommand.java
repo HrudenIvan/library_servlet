@@ -15,8 +15,19 @@ import model.DAO.OrderDAOImpl;
 import model.entity.Book;
 import model.entity.OrderType;
 
+/**
+ * Command to access order book page
+ */
 public class PrepareBookOrderCommand implements Command {
 
+	/**
+	 * Stores {@link Book}, list of {@link OrderType}s in request and forwards to order book page
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

@@ -39,7 +39,7 @@ public class Validator {
 				result = false;
 				bookOrder.setCloseDate(oldCloseDate);
 				errors.put("closeDate", Localizer.getString(request, "validation.closedate.empty"));
-			} else if (bookOrder.getCloseDate().isBefore(LocalDate.now())) {
+			} else if (bookOrder.getCloseDate().isBefore(oldCloseDate)) {
 				result = false;
 				bookOrder.setCloseDate(oldCloseDate);
 				errors.put("closeDate", Localizer.getString(request, "validation.closedate.before"));

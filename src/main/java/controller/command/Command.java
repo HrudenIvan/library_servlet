@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import Exception.DBException;
 
+/**
+ * Interface for command
+ */
 public interface Command {
 	void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, DBException;
 }

@@ -11,8 +11,18 @@ import javax.servlet.http.HttpSession;
 
 import Exception.DBException;
 
+/**
+ * Command to change current {@link Locale}
+ */
 public class ChangeLocaleCommand implements Command {
 
+	/**
+	 * Stores new {@link Locale} in session and {@link Cookie} and forwards to default command
+	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

@@ -20,8 +20,20 @@ import util.Password;
 import util.Util;
 import util.Validator;
 
+/**
+ * Command for adding new {@link User}
+ */
 public class AddUserCommand implements Command {
 
+	/**
+	 * Method for handling {@link User} adding. If new user not valid, then forwards to add user page with error messages,
+	 * otherwise configures session with new user and redirects to all books page 
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

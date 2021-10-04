@@ -11,8 +11,19 @@ import model.DAO.AuthorDAO;
 import model.DAO.AuthorDAOImpl;
 import model.entity.Author;
 
+/**
+ * Command to access {@link Author} update page
+ */
 public class PrepareAuthorsCommand implements Command {
 
+	/**
+	 * Stores needed {@link Author} in request and forwards to update author page
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

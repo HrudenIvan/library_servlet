@@ -18,8 +18,20 @@ import model.entity.OrderStatus;
 
 import util.Validator;
 
+/**
+ * Command for updating {@link BookOrder}
+ */
 public class UpdateBookOrderCommand implements Command {
 
+	/**
+	 * Method for handling {@link BookOrder} updating. If updated BookOrder not valid, then forwards to update book order page with error messages,
+	 * otherwise redirects to librarian page 
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

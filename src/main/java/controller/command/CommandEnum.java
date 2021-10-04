@@ -1,5 +1,8 @@
 package controller.command;
 
+/**
+ * Enumeration for all commands
+ */
 public enum CommandEnum {
 	LOGIN {
 		{

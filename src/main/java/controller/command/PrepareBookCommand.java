@@ -18,8 +18,19 @@ import model.entity.Author;
 import model.entity.Book;
 import model.entity.Publisher;
 
+/**
+ * Command to access {@link Book} update page
+ */
 public class PrepareBookCommand implements Command {
 
+	/**
+	 * Stores needed {@link Book} in request and forwards to update book page
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {

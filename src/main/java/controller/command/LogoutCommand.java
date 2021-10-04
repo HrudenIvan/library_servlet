@@ -10,13 +10,23 @@ import javax.servlet.http.HttpSession;
 
 import util.Util;
 
+/**
+ * Logout command
+ */
 public class LogoutCommand implements Command {
 
+	/**
+	 * Invalidates session, creates new session, stores there guest data and forwards to all books page
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		session.setAttribute("language", "ru");
+		//session.setAttribute("language", "ru");?????
 		session.invalidate();
 		session = request.getSession(true);
 		session.setAttribute("isBlocked", Boolean.FALSE);

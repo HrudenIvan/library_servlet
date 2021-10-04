@@ -18,8 +18,20 @@ import util.Localizer;
 import util.Password;
 import util.Util;
 
+/**
+ * Login command
+ */
 public class LoginCommand implements Command {
 
+	/**
+	 * Verifies login data. If credentials is wrong, then forwards to login page with error message,
+	 * otherwise stores current user data in session and redirects to default command
+ 	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exception
+	 * @throws IOException in case of io exception
+	 * @throws DBException in case of db exception
+	 */
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, DBException {
