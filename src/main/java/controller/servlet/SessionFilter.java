@@ -14,9 +14,16 @@ import javax.servlet.http.HttpSession;
 
 import util.Util;
 
+/**
+ * Session filter
+ */
 @WebFilter("/*")
 public class SessionFilter implements Filter {
 
+	/**
+	 * Filter method. Checks if session holds needed information about current user, if so - do nothing,
+	 * otherwise stores in session guest information 
+	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;

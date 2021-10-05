@@ -16,6 +16,9 @@ import model.Constants;
 import model.PooledConnections;
 import model.entity.Author;
 
+/**
+ * Implementation of {@link AuthorDAO} interface
+ */
 public class AuthorDAOImpl implements AuthorDAO {
 	private static AuthorDAO instance;
 	private static final Logger logger;
@@ -24,9 +27,16 @@ public class AuthorDAOImpl implements AuthorDAO {
 		logger = LogManager.getLogger(AuthorDAOImpl.class.getName());
 	}
 
+	/**
+	 * Protects constructor to deny direct instantiation
+	 */
 	private AuthorDAOImpl() {
 	}
 
+	/**
+	 * Method to get instance of {@link AuthorDAO}
+	 * @return instance of {@link AuthorDAO}
+	 */
 	public static synchronized AuthorDAO getInstance() {
 		if (instance == null) {
 			instance = new AuthorDAOImpl();
@@ -34,6 +44,11 @@ public class AuthorDAOImpl implements AuthorDAO {
 		return instance;
 	}
 
+	/**
+	 * Retrieve {@link Author} by id from data base
+	 * @param id author id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public Author getAuthor(long id) throws DBException {
 		Author author = new Author();
@@ -54,6 +69,10 @@ public class AuthorDAOImpl implements AuthorDAO {
 		return author;
 	}
 
+	/**
+	 * Retrieve all {@link Author}s from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<Author> getAllAuthors() throws DBException {
 		List<Author> authors = new ArrayList<Author>();
@@ -75,6 +94,11 @@ public class AuthorDAOImpl implements AuthorDAO {
 		return authors;
 	}
 
+	/**
+	 * Adds given {@link Author} to data base
+	 * @param author {@link Author} to be added
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void addAuthor(Author author) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
@@ -94,6 +118,11 @@ public class AuthorDAOImpl implements AuthorDAO {
 		}
 	}
 
+	/**
+	 * Updates given {@link Author} in data base
+	 * @param author {@link Author} to be updated
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void updateAuthor(Author author) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();

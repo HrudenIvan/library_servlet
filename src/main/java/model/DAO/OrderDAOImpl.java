@@ -16,10 +16,15 @@ import org.apache.logging.log4j.Logger;
 import Exception.DBException;
 import model.Constants;
 import model.PooledConnections;
+import model.entity.Book;
 import model.entity.BookOrder;
 import model.entity.OrderStatus;
 import model.entity.OrderType;
+import model.entity.User;
 
+/**
+ * Implementation of {@link OrderDAO} interface
+ */
 public class OrderDAOImpl implements OrderDAO {
 	private static OrderDAO instance;
 	private static final Logger logger;
@@ -28,9 +33,16 @@ public class OrderDAOImpl implements OrderDAO {
 		logger = LogManager.getLogger(OrderDAOImpl.class.getName());
 	}
 
+	/**
+	 * Protects constructor to deny direct instantiation
+	 */
 	private OrderDAOImpl() {
 	}
 
+	/**
+	 * Method to get instance of {@link OrderDAO}
+	 * @return instance of {@link OrderDAO}
+	 */
 	public static synchronized OrderDAO getInstance() {
 		if (instance == null) {
 			instance = new OrderDAOImpl();
@@ -38,6 +50,10 @@ public class OrderDAOImpl implements OrderDAO {
 		return instance;
 	}
 
+	/**
+	 * Retrieves all {@link OrderType}s from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<OrderType> getAllOrderTypes() throws DBException {
 		List<OrderType> orderTypes = new ArrayList<OrderType>();
@@ -58,6 +74,10 @@ public class OrderDAOImpl implements OrderDAO {
 		return orderTypes;
 	}
 
+	/**
+	 * Retrieves all {@link OrderStatus}s from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<OrderStatus> getAllOrderStatuses() throws DBException {
 		List<OrderStatus> orderStatuses = new ArrayList<OrderStatus>();
@@ -78,6 +98,13 @@ public class OrderDAOImpl implements OrderDAO {
 		return orderStatuses;
 	}
 
+	/**
+	 * Adds {@link BookOrder} to data base
+	 * @param userId {@link User} id
+	 * @param bookId {@link Book} id
+	 * @param orderTypeId {@link OrderType} id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void addOrder(Long userId, Long bookId, int orderTypeId) throws DBException {
 		Connection con = null;
@@ -136,6 +163,11 @@ public class OrderDAOImpl implements OrderDAO {
 
 	}
 
+	/**
+	 * Retrieves not closed {@link BookOrder}s for given user from data base
+	 * @param userId given {@link User} id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<BookOrder> getUserOrders(long userId) throws DBException {
 		List<BookOrder> bookOrders = new ArrayList<BookOrder>();
@@ -173,6 +205,10 @@ public class OrderDAOImpl implements OrderDAO {
 		return (timestamp == null) ? null : timestamp.toLocalDateTime().toLocalDate();
 	}
 
+	/**
+	 * Retrieves new {@link BookOrder}s from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<BookOrder> getNewBookOrders() throws DBException {
 		List<BookOrder> bookOrders = new ArrayList<BookOrder>();
@@ -203,6 +239,12 @@ public class OrderDAOImpl implements OrderDAO {
 		return bookOrders;
 	}
 
+	/**
+	 * Retrieves {@link BookOrder} by user id and book id from data base
+	 * @param userId given {@link User} id
+	 * @param bookId given {@link Book} id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public BookOrder getBookOrder(Long userId, Long bookId) throws DBException {
 		BookOrder bookOrder = null;
@@ -235,6 +277,11 @@ public class OrderDAOImpl implements OrderDAO {
 		return bookOrder;
 	}
 
+	/**
+	 * Updates given {@link BookOrder} in data base
+	 * @param bookOrder {@link BookOrder} to be updated
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void updateBookOrder(BookOrder bookOrder) throws DBException {
 		Connection con = null;
@@ -298,6 +345,11 @@ public class OrderDAOImpl implements OrderDAO {
 		return result.toString();
 	}
 
+	/**
+	 * Retrieves open {@link BookOrder}s for given user from data base
+	 * @param userId given {@link User} id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<BookOrder> getUserOpenBookOrders(Long userId) throws DBException {
 		List<BookOrder> bookOrders = new ArrayList<BookOrder>();

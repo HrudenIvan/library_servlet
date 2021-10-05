@@ -1,5 +1,8 @@
 package model.entity;
 
+/**
+ * Author entity
+ */
 public class Author {
 	private long id;
 	private String firstName;

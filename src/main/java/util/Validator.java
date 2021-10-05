@@ -1,25 +1,42 @@
 package util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import model.entity.Author;
 import model.entity.Book;
 import model.entity.BookOrder;
+import model.entity.OrderStatus;
 import model.entity.Publisher;
 import model.entity.User;
 
 import java.time.LocalDate;
 
+/**
+ * Utility class for validation entities
+ */
 public class Validator {
 
 	private static final String LOGIN_REGEX = "^[A-Za-z0-9]{1,20}$";
 	private static final String PASSWORD_REGEX = "^[A-Za-z0-9]{10,}$";
 
+	/**
+	 * Protect constructor to deny instantiation
+	 */
 	private Validator() {
 	}
 
+	/**
+	 * Validates {@link BookOrder} entity. In case of any errors falls back to old values
+	 * @param request {@link HttpServletRequest}
+	 * @param bookOrder  {@link BookOrder} to be validated
+	 * @param oldOsId old {@link OrderStatus} id
+	 * @param oldCloseDate old close date
+	 * @param errors {@link Map} that stores errors
+	 * @return true if {@link BookOrder} is valid, false - otherwise
+	 */
 	public static boolean validateAndUpdateBookOrder(HttpServletRequest request, BookOrder bookOrder, int oldOsId,
 			LocalDate oldCloseDate, HashMap<String, String> errors) {
 		boolean result;
@@ -74,6 +91,13 @@ public class Validator {
 		return result;
 	}
 
+	/**
+	 * Validates {@link Publisher} entity.
+	 * @param request {@link HttpServletRequest}
+	 * @param publisher {@link Publisher} to be validated
+	 * @param errors {@link Map} that stores errors
+	 * @return true if {@link Publisher} is valid, false - otherwise
+	 */
 	public static boolean validatePublisher(HttpServletRequest request, Publisher publisher,
 			HashMap<String, String> errors) {
 		boolean result;
@@ -98,6 +122,14 @@ public class Validator {
 		return result;
 	}
 
+	/**
+	 * Validates {@link Book} entity after update. In case of any errors falls back to old values
+	 * @param request {@link HttpServletRequest}
+	 * @param book {@link Book} to be validated
+	 * @param oldQuantity old quantity value
+	 * @param errors {@link Map} that stores errors
+	 * @return true if {@link Book} is valid, false - otherwise
+	 */
 	public static boolean valideteAndUpdateBookUpdate(HttpServletRequest request, Book book, int oldQuantity,
 			HashMap<String, String> errors) {
 		boolean result;
@@ -125,6 +157,13 @@ public class Validator {
 		return result;
 	}
 
+	/**
+	 * Validates {@link Book} entity after creation.
+	 * @param request {@link HttpServletRequest}
+	 * @param book {@link Book} to be validated
+	 * @param errors {@link Map} that stores errors
+	 * @return true if {@link Book} is valid, false - otherwise
+	 */
 	public static boolean valideteBook(HttpServletRequest request, Book book, HashMap<String, String> errors) {
 		boolean result;
 
@@ -172,6 +211,13 @@ public class Validator {
 		return result;
 	}
 
+	/**
+	 * Validates {@link Author} entity
+	 * @param request {@link HttpServletRequest}
+	 * @param author {@link Author} to be validated
+	 * @param errors {@link Map} that stores errors
+	 * @return true if {@link Author} is valid, false - otherwise
+	 */
 	public static boolean validateAuthor(HttpServletRequest request, Author author, HashMap<String, String> errors) {
 		boolean result;
 
@@ -181,6 +227,14 @@ public class Validator {
 		return result;
 	}
 
+	/**
+	 * Validates password
+	 * @param request {@link HttpServletRequest}
+	 * @param password1 raw password
+	 * @param password2 confirmation of password
+	 * @param errors {@link Map} that stores errors
+	 * @return true if password is valid, false - otherwise
+	 */
 	public static boolean validatePassword(HttpServletRequest request, String password1, String password2,
 			HashMap<String, String> errors) {
 		boolean result = true;
@@ -206,6 +260,13 @@ public class Validator {
 		return result;
 	}
 
+	/**
+	 * Validates {@link User} entity
+	 * @param request {@link HttpServletRequest}
+	 * @param user {@link User} to be validated
+	 * @param errors {@link Map} that stores errors
+	 * @return true if {@link User} is valid, false - otherwise
+	 */
 	public static boolean validateUser(HttpServletRequest request, User user, HashMap<String, String> errors) {
 		boolean result;
 

@@ -16,6 +16,9 @@ import model.Constants;
 import model.PooledConnections;
 import model.entity.Publisher;
 
+/**
+ * Implementation of {@link PublisherDAO} interface
+ */
 public class PublisherDAOImpl implements PublisherDAO {
 	private static PublisherDAO instance;
 	private static final Logger logger;
@@ -24,9 +27,16 @@ public class PublisherDAOImpl implements PublisherDAO {
 		logger = LogManager.getLogger(PublisherDAOImpl.class.getName());
 	}
 
+	/**
+	 * Protects constructor to deny direct instantiation
+	 */
 	private PublisherDAOImpl() {
 	}
 
+	/**
+	 * Method to get instance of {@link PublisherDAO}
+	 * @return instance of {@link PublisherDAO}
+	 */
 	public static synchronized PublisherDAO getInstance() {
 		if (instance == null) {
 			instance = new PublisherDAOImpl();
@@ -34,6 +44,11 @@ public class PublisherDAOImpl implements PublisherDAO {
 		return instance;
 	}
 
+	/**
+	 * Retrieves {@link Publisher} by id from data base
+	 * @param id given {@link Publisher} id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public Publisher getPublisher(long id) throws DBException {
 		Publisher publisher = new Publisher();
@@ -53,6 +68,10 @@ public class PublisherDAOImpl implements PublisherDAO {
 		return publisher;
 	}
 
+	/**
+	 * Retrieves all {@link Publisher}s from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<Publisher> getAllPublishers() throws DBException {
 		List<Publisher> publishers = new ArrayList<Publisher>();
@@ -73,6 +92,11 @@ public class PublisherDAOImpl implements PublisherDAO {
 		return publishers;
 	}
 
+	/**
+	 * Adds given {@link Publisher} to data base
+	 * @param publisher given {@link Publisher}
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void addPublisher(Publisher publisher) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
@@ -91,6 +115,11 @@ public class PublisherDAOImpl implements PublisherDAO {
 		}
 	}
 
+	/**
+	 * Updates given {@link Publisher} in data base
+	 * @param publisher given {@link Publisher}
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void updatePublisher(Publisher publisher) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();

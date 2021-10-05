@@ -3,6 +3,9 @@ package model.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * BookOrder entity
+ */
 public class BookOrder {
 	private static final double penaltyDaylyAmount=1.5;
 	private long userId;

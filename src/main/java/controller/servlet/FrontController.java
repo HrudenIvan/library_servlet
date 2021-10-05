@@ -14,6 +14,9 @@ import controller.command.Command;
 import controller.command.CommandFactory;
 import model.PooledConnections;
 
+/**
+ * Main controller.
+ */
 @WebServlet("/main")
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -40,6 +43,13 @@ public class FrontController extends HttpServlet {
 		processRequest(request, response);
 	}
 
+	/**
+	 * Method to process request. Defines needed command through request parameter "action" and executes it.
+	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @throws ServletException in case of servlet exceptions
+	 * @throws IOException in case of io exceptions
+	 */
 	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String action = request.getParameter("action");

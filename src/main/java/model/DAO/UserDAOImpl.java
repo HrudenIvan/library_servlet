@@ -16,6 +16,9 @@ import model.PooledConnections;
 import model.entity.*;
 import model.*;
 
+/**
+ * Implementation of {@link UserDAO} interface
+ */
 public class UserDAOImpl implements UserDAO {
 	private static UserDAO instance;
 	private static final Logger logger;
@@ -24,9 +27,16 @@ public class UserDAOImpl implements UserDAO {
 		logger = LogManager.getLogger(UserDAOImpl.class.getName());
 	}
 
+	/**
+	 * Protects constructor to deny direct instantiation
+	 */
 	private UserDAOImpl() {
 	}
 
+	/**
+	 * Method to get instance of {@link UserDAO}
+	 * @return instance of {@link UserDAO}
+	 */
 	public static synchronized UserDAO getInstance() {
 		if (instance == null) {
 			instance = new UserDAOImpl();
@@ -34,6 +44,11 @@ public class UserDAOImpl implements UserDAO {
 		return instance;
 	}
 
+	/**
+	 * Retrieves {@link User} by login from data base
+	 * @param login {@link User} login
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public User getUserByLogin(String login) throws DBException {
 		User user = null;
@@ -63,6 +78,10 @@ public class UserDAOImpl implements UserDAO {
 		return user;
 	}
 
+	/**
+	 * Retrieves all {@link User}s from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<User> getAllUsers() throws DBException {
 		List<User> users = new ArrayList<>();
@@ -91,6 +110,11 @@ public class UserDAOImpl implements UserDAO {
 		return users;
 	}
 
+	/**
+	 * Updates given {@link User} in data base
+	 * @param user given {@link User}
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void updateUser(User user) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
@@ -111,6 +135,11 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
+	/**
+	 * Adds given {@link User} to data base
+	 * @param user given {@link User}
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void addUser(User user) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
@@ -133,6 +162,10 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
+	/**
+	 * Retrieves all {@link UserType}s from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<UserType> getAllUserTypes() throws DBException {
 		List<UserType> userTypes = new ArrayList<UserType>();
@@ -153,6 +186,10 @@ public class UserDAOImpl implements UserDAO {
 		return userTypes;
 	}
 
+	/**
+	 * Retrieves all {@link User}s with open BookOrders from data base
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<User> getAllUsersWithOpenOrders() throws DBException {
 		List<User> users = new ArrayList<User>();
@@ -175,6 +212,11 @@ public class UserDAOImpl implements UserDAO {
 		return users;
 	}
 
+	/**
+	 * Retrieves {@link User} by id from data base
+	 * @param userId {@link User} id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public User getUserById(Long userId) throws DBException {
 		User user = new User();

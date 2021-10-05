@@ -14,14 +14,17 @@ import controller.command.CommandEnum;
 
 import static controller.command.CommandEnum.*;
 
+/**
+ * Authorization filter
+ */
 @WebFilter("/*")
-public class AuthenticationFilter implements Filter {
+public class AuthorizationFilter implements Filter {
 	private EnumSet<CommandEnum> guestCommands;
 	private EnumSet<CommandEnum> userCommands;
 	private EnumSet<CommandEnum> librarianCommands;
 	private EnumSet<CommandEnum> adminCommands;
 	
-	public AuthenticationFilter() {
+	public AuthorizationFilter() {
 		guestCommands = EnumSet.of(LOGIN, GETALLBOOKS, ADDUSER, REGISTER, DEFAULT, CHANGELOCALE);
 		userCommands = EnumSet.of(LOGOUT, GETALLBOOKS, DEFAULT, PREPAREBOOKORDER,
 				ADDBOOKORDER, PREPARECABINET, CHANGELOCALE);
@@ -33,6 +36,16 @@ public class AuthenticationFilter implements Filter {
 				PREPAREPUBLISHER, UPDATEPUBLISHER, GETALLPUBLISHERS, DEFAULT, CHANGELOCALE);
 	}
 	
+	/**
+	 * Filter method.
+	 * <p> If there is no request parameter "action" and request path equals to login or registration page, then
+	 * forwards request without any changes.<p>
+	 * <p> If there is no request parameter "action" and requested page is not login or register, then forwards to default command.<p>
+	 * <p> If user is blocked, then forwards to default command for admin or librarian and to private cabinet for user.<p>
+	 * <p> Compare current request parameter "action" to list of granted commands for user type, if action matches, then do nothing, otherwise
+	 * forwards to default command<p> 
+	 * 
+	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;

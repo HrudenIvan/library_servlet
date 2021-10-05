@@ -1,7 +1,13 @@
 package model;
 
+/**
+ * Utility class that holds constants
+ */
 public class Constants {
 
+	/**
+	 * Protect constructor to deny instantiation
+	 */
 	private Constants() {
 	}
 

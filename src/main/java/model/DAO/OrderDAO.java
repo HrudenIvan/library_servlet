@@ -7,6 +7,9 @@ import model.entity.BookOrder;
 import model.entity.OrderStatus;
 import model.entity.OrderType;
 
+/**
+ * Interface for {@link BookOrder} DAO
+ */
 public interface OrderDAO {
 
 	List<OrderType> getAllOrderTypes() throws DBException;

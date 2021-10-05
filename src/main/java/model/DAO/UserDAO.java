@@ -6,6 +6,9 @@ import Exception.DBException;
 import model.entity.User;
 import model.entity.UserType;
 
+/**
+ * Interface for {@link User} DAO
+ */
 public interface UserDAO {
 	User getUserByLogin(String login) throws DBException;
 

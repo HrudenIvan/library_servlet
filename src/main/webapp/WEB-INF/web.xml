@@ -37,7 +37,7 @@
 
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
-		<filter-class>controller.servlet.AuthenticationFilter</filter-class>
+		<filter-class>controller.servlet.AuthorizationFilter</filter-class>
 	</filter>
 
 	<filter-mapping>

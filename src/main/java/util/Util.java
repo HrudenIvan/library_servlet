@@ -6,12 +6,24 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import model.entity.Author;
+import model.entity.Book;
+
+/**
+ * Utility class for different methods
+ */
 public class Util {
 
 	private Util() {
 
 	}
 
+	/**
+	 * Defines {@link Locale} from {@link Cookie}. If locale not stored in cookie,
+	 * then sets locale to "en_US"
+	 * @param req {@link HttpServletRequest}
+	 * @return {@link Locale}
+	 */
 	public static Locale defineLocale(HttpServletRequest req) {
 		Cookie[] cookies = req.getCookies();
 		String language = null;
@@ -35,6 +47,15 @@ public class Util {
 		return locale;
 	}
 
+	/**
+	 * Defines pagination parameter Sort by. First of all tries to retrieve it from request
+	 * parameter "sort". If "sort" is null, then tries to find it in cookie. If cookie
+	 * does not contain it, then set default value "b.release_date". Last step - store
+	 * this parameter in cookie.  
+	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @return pagination parameter Sort by as {@link String}
+	 */
 	public static String defineSortAndStoreInCookie(HttpServletRequest request, HttpServletResponse response) {
 		String result = request.getParameter("sort");
 		if (result == null) {
@@ -56,6 +77,15 @@ public class Util {
 		return result;
 	}
 	
+	/**
+	 * Defines pagination parameter Order by. First of all tries to retrieve it from request
+	 * parameter "order". If "order" is null, then tries to find it in cookie. If cookie
+	 * does not contain it, then set default value "desc". Last step - store
+	 * this parameter in cookie.  
+	 * @param request {@link HttpServletRequest}
+	 * @param response {@link HttpServletResponse}
+	 * @return pagination parameter Order by as {@link String}
+	 */
 	public static String defineOrderAndStoreInCookie(HttpServletRequest request, HttpServletResponse response) {
 		String result = request.getParameter("order");
 		if (result == null) {
@@ -77,6 +107,15 @@ public class Util {
 		return result;
 	}
 
+	/**
+	 * Builds pagination navigation menu.
+	 * @param page current page
+	 * @param pagesCount total amount of pages
+	 * @param title {@link Book} title
+	 * @param aLastname {@link Author} last name
+	 * @param aFirstname {@link Author} first name
+	 * @return pagination navigation menu as {@link String}
+	 */
 	public static String buildPaginationNav(int page, int pagesCount, String title, String aLastname,
 			String aFirstname) {
 		if (pagesCount == 1) {

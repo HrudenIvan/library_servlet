@@ -5,6 +5,9 @@ import java.util.List;
 import Exception.DBException;
 import model.entity.Author;
 
+/**
+ * Interface for {@link Author} DAO
+ */
 public interface AuthorDAO {
 	Author getAuthor(long id) throws DBException;
 

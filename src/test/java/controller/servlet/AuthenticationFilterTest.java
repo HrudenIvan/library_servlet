@@ -21,7 +21,7 @@ public class AuthenticationFilterTest {
 		FilterChain filterChain = mock(FilterChain.class);
 		RequestDispatcher reqDisp = mock(RequestDispatcher.class);
 		when(request.getRequestDispatcher("main?action=default")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -35,7 +35,7 @@ public class AuthenticationFilterTest {
 		RequestDispatcher reqDisp = mock(RequestDispatcher.class);
 		when(request.getServletPath()).thenReturn("/login.jsp");
 		when(request.getRequestDispatcher("/login.jsp")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -49,7 +49,7 @@ public class AuthenticationFilterTest {
 		RequestDispatcher reqDisp = mock(RequestDispatcher.class);
 		when(request.getServletPath()).thenReturn("/register.jsp");
 		when(request.getRequestDispatcher("/register.jsp")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -67,7 +67,7 @@ public class AuthenticationFilterTest {
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.TRUE);
 		when(session.getAttribute("currentUserType")).thenReturn("user");
 		when(request.getRequestDispatcher("main?action=prepareCabinet")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -85,7 +85,7 @@ public class AuthenticationFilterTest {
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.TRUE);
 		when(session.getAttribute("currentUserType")).thenReturn("admin");
 		when(request.getRequestDispatcher("main?action=default")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -103,7 +103,7 @@ public class AuthenticationFilterTest {
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.TRUE);
 		when(session.getAttribute("currentUserType")).thenReturn("librarian");
 		when(request.getRequestDispatcher("main?action=default")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -121,7 +121,7 @@ public class AuthenticationFilterTest {
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.FALSE);
 		when(session.getAttribute("currentUserType")).thenReturn("user");
 		when(request.getRequestDispatcher("main?action=default")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -139,7 +139,7 @@ public class AuthenticationFilterTest {
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.FALSE);
 		when(session.getAttribute("currentUserType")).thenReturn("librarian");
 		when(request.getRequestDispatcher("main?action=default")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -157,7 +157,7 @@ public class AuthenticationFilterTest {
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.FALSE);
 		when(session.getAttribute("currentUserType")).thenReturn("admin");
 		when(request.getRequestDispatcher("main?action=default")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -175,7 +175,7 @@ public class AuthenticationFilterTest {
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.FALSE);
 		when(session.getAttribute("currentUserType")).thenReturn("guest");
 		when(request.getRequestDispatcher("main?action=default")).thenReturn(reqDisp);
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(reqDisp).forward(request, response);
@@ -191,7 +191,7 @@ public class AuthenticationFilterTest {
 		when(request.getParameter("action")).thenReturn("default");
 		when(session.getAttribute("isBlocked")).thenReturn(Boolean.FALSE);
 		when(session.getAttribute("currentUserType")).thenReturn("user");
-		AuthenticationFilter filter = new AuthenticationFilter();
+		AuthorizationFilter filter = new AuthorizationFilter();
 		filter.doFilter(request, response, filterChain);
 		
 		verify(filterChain).doFilter(request, response);;

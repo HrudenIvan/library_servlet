@@ -15,6 +15,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Custom tag to format LocalDate and LocalDateTime on jsp pages
+ */
 public class FormatDateTime extends TagSupport {
 	private static final long serialVersionUID = 1L;
 	private Object value;
@@ -28,6 +31,10 @@ public class FormatDateTime extends TagSupport {
 		this.value = value;
 	}
 
+	/**
+	 * Method that invokes on start of tag. 
+	 * Checks to what class belongs passed tag attribute and format its printed value according to current locale
+	 */
 	@Override
 	public int doStartTag() throws JspException {
 		Locale locale = (Locale) pageContext.getSession().getAttribute("locale");

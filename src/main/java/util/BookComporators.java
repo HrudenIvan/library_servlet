@@ -5,11 +5,17 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Class that builds and returns as {@link List} pagination parameters "Sort by" and "Sort order"
+ */
 public class BookComporators {
 
 	private BookComporators() {
 	}
 
+	/**
+	 * Class that encapsulates pagination parameter "Sort by"
+	 */
 	public static class SortBy {
 		private String title;
 		private String value;
@@ -29,6 +35,9 @@ public class BookComporators {
 
 	}
 	
+	/**
+	 * Class that encapsulates pagination parameter "Order by"
+	 */
 	public static class OrderBy {
 		private String title;
 		private String value;
@@ -48,6 +57,11 @@ public class BookComporators {
 
 	}
 	
+	/**
+	 * Returns list of available pagination parameters "Sort by" 
+	 * @param request {@link HttpServletRequest}
+	 * @return {@link List} of {@link SortBy}
+	 */
 	public static List<SortBy> getAllSortBy(HttpServletRequest request) {
 		List<SortBy> result = new ArrayList<BookComporators.SortBy>();
 		result.add(new SortBy(Localizer.getString(request, "title"),"b.title"));
@@ -57,6 +71,11 @@ public class BookComporators {
 		return result;
 	}
 	
+	/**
+	 * Returns list of available pagination parameters "Order by" 
+	 * @param request {@link HttpServletRequest}
+	 * @return {@link List} of {@link OrderBy}
+	 */
 	public static List<OrderBy> getAllOrderBy(HttpServletRequest request) {
 		List<OrderBy> result = new ArrayList<BookComporators.OrderBy>();
 		result.add(new OrderBy(Localizer.getString(request, "ascending"),"asc"));

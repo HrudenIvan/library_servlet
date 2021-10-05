@@ -1,5 +1,12 @@
 package model.entity;
 
+/**
+ * Order status entity. Can be in one of 4 states:
+ * <p><ul><li>id=1 status=new
+ * <li>id=2 status=ready
+ * <li>id=3 status=open
+ * <li>id=4 status=closed
+ */
 public class OrderStatus {
 	private int id;
 	private String status;

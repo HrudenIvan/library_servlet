@@ -1,5 +1,8 @@
 package model.entity;
 
+/**
+ * Publisher entity
+ */
 public class Publisher {
 	private long id;
 	private String name;

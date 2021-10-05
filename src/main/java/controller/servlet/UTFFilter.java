@@ -8,9 +8,15 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 
+/**
+ * UTF filter
+ */
 @WebFilter("/*")
 public class UTFFilter implements Filter {
 
+	/**
+	 * Sets request and response encoding to UTF-8
+	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");

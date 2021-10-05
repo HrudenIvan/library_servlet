@@ -5,6 +5,9 @@ import java.util.List;
 import Exception.DBException;
 import model.entity.Book;
 
+/**
+ * Interface for {@link Book} DAO
+ */
 public interface BookDAO {
 	List<Book> getAllBooks(int page,int BOOKS_PER_PAGE, String sort, String order, String title, String aLastname, String aFirstname) throws DBException;
 

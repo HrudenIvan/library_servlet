@@ -19,6 +19,9 @@ import model.entity.Author;
 import model.entity.Book;
 import model.entity.Publisher;
 
+/**
+ * Implementation of {@link BookDAO} interface
+ */
 public class BookDAOImpl implements BookDAO {
 	private static BookDAO instance;
 	private static final Logger logger;
@@ -27,6 +30,15 @@ public class BookDAOImpl implements BookDAO {
 		logger = LogManager.getLogger(BookDAOImpl.class.getName());
 	}
 
+	/**
+	 * Protects constructor to deny direct instantiation
+	 */
+	private BookDAOImpl() {}
+	
+	/**
+	 * Method to get instance of {@link BookDAO}
+	 * @return instance of {@link BookDAO}
+	 */
 	public static synchronized BookDAO getInstance() {
 		if (instance == null) {
 			instance = new BookDAOImpl();
@@ -34,6 +46,17 @@ public class BookDAOImpl implements BookDAO {
 		return instance;
 	}
 
+	/**
+	 * Retrieves all {@link Book}s from data base according to pagination parameters
+	 * @param page page number
+	 * @param BOOKS_PER_PAGE quantity of books per page
+	 * @param sort column name for sort by
+	 * @param order sorting direction
+	 * @param title book title
+	 * @param aLastname author last name
+	 * @param aFirstname author first name
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public List<Book> getAllBooks(int page,int BOOKS_PER_PAGE, String sort, String order, String title, String aLastname, String aFirstname)
 			throws DBException {
@@ -77,7 +100,12 @@ public class BookDAOImpl implements BookDAO {
 		}
 		return books;
 	}
-
+	
+	/**
+	 * Retrieve {@link Book} by id from data base
+	 * @param id book id
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public Book getBook(long id) throws DBException {
 		Book book = null;
@@ -111,6 +139,11 @@ public class BookDAOImpl implements BookDAO {
 		return book;
 	}
 
+	/**
+	 * Updates given {@link Book} in data base
+	 * @param book {@link Book} to be updated
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void updateBook(Book book) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
@@ -131,6 +164,11 @@ public class BookDAOImpl implements BookDAO {
 
 	}
 
+	/**
+	 * Adds given {@link Book} to data base
+	 * @param book {@link Book} to be added
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public void addBook(Book book) throws DBException {
 		try (Connection con = PooledConnections.getInstance().getConnection();
@@ -154,6 +192,15 @@ public class BookDAOImpl implements BookDAO {
 		}
 	}
 
+	/**
+	 * Returns count of {@link Book} in data base which satisfies pagination parameters
+	 * @param sort column name for sort by
+	 * @param order sorting direction
+	 * @param title book title
+	 * @param aLastname author last name
+	 * @param aFirstname author first name
+	 * @throws DBException in case of {@link SQLException}
+	 */
 	@Override
 	public int booksCount(String sort, String order, String title, String aLastname, String aFirstname)
 			throws DBException {
